@@ -1,0 +1,35 @@
+﻿<Window x:Class="WpfWebViewApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Height="450" Width="800"
+        Closing="Window_Closing">
+    <Border Background="White" CornerRadius="4" BorderThickness="5" BorderBrush="Red">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid MouseDown="TopGrid_MouseDown" Background="Gray">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock x:Name="MainDesc" />
+                    <Button Click="Button_Click">Send</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <RadioButton GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">Edge</RadioButton>
+                    <RadioButton GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">Chrome</RadioButton>
+                    <Button Click="CloseButton_Click">Close</Button>
+                </StackPanel>
+            </Grid>
+            <wv2:WebView2 x:Name="WV2" Grid.Row="1" Source="https://erasebg.cafe24.com" Visibility="Visible" WebMessageReceived="WV2_WebMessageReceived" />
+            <cef:ChromiumWebBrowser x:Name="CEF" Grid.Row="1" Address="https://erasebg.cafe24.com" Visibility="Collapsed" JavascriptMessageReceived="CEF_JavascriptMessageReceived" />
+        </Grid>
+    </Border>
+</Window>
