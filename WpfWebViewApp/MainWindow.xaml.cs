@@ -210,7 +210,11 @@ namespace WpfWebViewApp
 
             if ((bool)this.Chrome.IsChecked)
             {
-                //this.CEF.
+               //if (this.CEF != null) this.CEF.ShowDevTools();
+
+                string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
+                 
+                this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
             }
         }
     }
