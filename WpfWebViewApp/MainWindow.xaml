@@ -12,23 +12,91 @@
         Height="450" Width="800"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
     <Window.Resources>
 
-        <Color x:Key="WindowFrameColor">#DCDCDC</Color>
+        <Color x:Key="WindowFrameColor">#8B8B8B</Color>
         
         <Style x:Key="ControlBarButton" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border>
+                            <Border.Background>
+                                <SolidColorBrush x:Name="ButtonBackgroundBrush" Color="Transparent" />
+                            </Border.Background>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#BBBBBB" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ControlBarCloseButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="0,4,0,0">
+                            <Border.Background>
+                                <SolidColorBrush x:Name="ButtonBackgroundBrush" Color="Transparent" />
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#E81123" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ControlBarRadioButton" TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Padding="21,0,21,0" CornerRadius="0,0,7,7">
+                            <Border.Background>
+                                <SolidColorBrush x:Name="RadioButtonBackgroundBrush" Color="Transparent" />
+                            </Border.Background>                            
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="RadioButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="{StaticResource WindowFrameColor}" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked" />
+                                    <VisualState x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Window.Resources>
-    <Border CornerRadius="4" BorderThickness="1">
+    <Border CornerRadius="4" BorderThickness="2">
         <Border.Background>
             <SolidColorBrush Color="{StaticResource WindowFrameColor}" />
         </Border.Background>
@@ -43,13 +111,15 @@
             </Grid.RowDefinitions>
             <Border CornerRadius="4,4,0,0" BorderThickness="0" Background="White" MouseDown="TopBorder_MouseDown">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock x:Name="MainDesc" />
-                        <Button Click="Button_Click">Send</Button>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="7,0,0,7">
+                        <RadioButton Style="{StaticResource ControlBarRadioButton}" GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">
+                            <TextBlock Text="Edge" />
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource ControlBarRadioButton}" GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">
+                            <TextBlock Text="Chrome" />
+                        </RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <RadioButton GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">Edge</RadioButton>
-                        <RadioButton GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">Chrome</RadioButton>
                         <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
                             <Image Source="/Images/icon_minimize.png" />
                         </Button>
@@ -59,7 +129,7 @@
                                 <Image x:Name="NormalImage" Source="/Images/icon_normal.png" />
                             </StackPanel>
                         </Button>
-                        <Button Style="{StaticResource ControlBarButton}" Click="CloseButton_Click">
+                        <Button Style="{StaticResource ControlBarCloseButton}" Click="CloseButton_Click">
                             <Image Source="/Images/icon_close.png" />
                         </Button>
                     </StackPanel>
