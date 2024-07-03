@@ -153,7 +153,7 @@ namespace WpfWebViewApp
             ShowWebView((WebViewName)Enum.Parse(typeof(WebViewName), rb.Name));
         }
 
-        private void TopGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        private void TopBorder_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {

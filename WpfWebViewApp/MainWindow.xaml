@@ -13,39 +13,63 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing">
     <Window.Resources>
+
+        <Color x:Key="WindowFrameColor">#DCDCDC</Color>
+        
         <Style x:Key="ControlBarButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <Border Background="White" CornerRadius="4" BorderThickness="1" BorderBrush="#444444">
+    <Border CornerRadius="4" BorderThickness="1">
+        <Border.Background>
+            <SolidColorBrush Color="{StaticResource WindowFrameColor}" />
+        </Border.Background>
+        <Border.BorderBrush>
+            <SolidColorBrush Color="{StaticResource WindowFrameColor}" />
+        </Border.BorderBrush>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="48" />
                 <RowDefinition />
+                <RowDefinition Height="4" />
             </Grid.RowDefinitions>
-            <Grid MouseDown="TopGrid_MouseDown" Background="Gray">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock x:Name="MainDesc" />
-                    <Button Click="Button_Click">Send</Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <RadioButton GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">Edge</RadioButton>
-                    <RadioButton GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">Chrome</RadioButton>
-                    <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
-                        <Image Source="/Images/icon_minimize.png" />
-                    </Button>
-                    <Button Style="{StaticResource ControlBarButton}" Click="MaximizeButton_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Image x:Name="MaximizeImage" Source="/Images/icon_maximize.png" />
-                            <Image x:Name="NormalImage" Source="/Images/icon_normal.png" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource ControlBarButton}" Click="CloseButton_Click">
-                        <Image Source="/Images/icon_close.png" />
-                    </Button>
-                </StackPanel>
-            </Grid>
+            <Border CornerRadius="4,4,0,0" BorderThickness="0" Background="White" MouseDown="TopBorder_MouseDown">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock x:Name="MainDesc" />
+                        <Button Click="Button_Click">Send</Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <RadioButton GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">Edge</RadioButton>
+                        <RadioButton GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">Chrome</RadioButton>
+                        <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
+                            <Image Source="/Images/icon_minimize.png" />
+                        </Button>
+                        <Button Style="{StaticResource ControlBarButton}" Click="MaximizeButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="MaximizeImage" Source="/Images/icon_maximize.png" />
+                                <Image x:Name="NormalImage" Source="/Images/icon_normal.png" />
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource ControlBarButton}" Click="CloseButton_Click">
+                            <Image Source="/Images/icon_close.png" />
+                        </Button>
+                    </StackPanel>
+                    <Rectangle Height="1" VerticalAlignment="Bottom">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="{StaticResource WindowFrameColor}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+            </Border>
             <wv2:WebView2 x:Name="WV2" Grid.Row="1" Source="https://erasebg.cafe24.com" Visibility="Visible" WebMessageReceived="WV2_WebMessageReceived" />
             <cef:ChromiumWebBrowser x:Name="CEF" Grid.Row="1" Address="https://erasebg.cafe24.com" Visibility="Collapsed" JavascriptMessageReceived="CEF_JavascriptMessageReceived" />
         </Grid>
