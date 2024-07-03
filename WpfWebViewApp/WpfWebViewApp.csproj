@@ -103,5 +103,13 @@
       <Version>1.0.2592.51</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_close.png" />
+    <Resource Include="Images\icon_maximize.png" />
+    <Resource Include="Images\icon_minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_normal.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

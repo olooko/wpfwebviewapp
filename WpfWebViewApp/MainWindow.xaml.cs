@@ -31,7 +31,7 @@ namespace WpfWebViewApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            ApplyMaximizeButtonState();
 
             /*
             if (System.Environment.Is64BitOperatingSystem)
@@ -100,6 +100,20 @@ namespace WpfWebViewApp
                 }
             }
             */
+        }
+
+        private void ApplyMaximizeButtonState()
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.MaximizeImage.Visibility = Visibility.Collapsed;
+                this.NormalImage.Visibility = Visibility.Visible;
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                this.MaximizeImage.Visibility = Visibility.Visible;
+                this.NormalImage.Visibility = Visibility.Collapsed;
+            }
         }
 
         // Checking the version using >= enables forward compatibility.
@@ -182,6 +196,21 @@ namespace WpfWebViewApp
                     catch { }
                 }
             }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = WindowState.Normal;
+            else if (this.WindowState == WindowState.Normal)
+                this.WindowState = WindowState.Maximized;
+
+            ApplyMaximizeButtonState();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
