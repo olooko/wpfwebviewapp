@@ -31,106 +31,100 @@ namespace WpfWebViewApp
         private string _base64DownImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHzSURBVHhe7ZBLUsMwEESzYJ978FkDR88NuAMngBWcIHSb7gJCEtsT2ZaceVVKObY06tebJEmSJEmSJEmS5ID9fn+jx2YJO+DgM9Yr1q1eNQeyP8jhUa+GgQOU/8Qib1jNlYDMlH+nAPjAGlYCNj5hWd40VQKy/pY3/SVgwzF500QJyHhM3pwugR+wTsmbqktAtnPy5n8JfIHVJ2+qLAGZhsibnxL4gDVU3rCEu25ABSDLGHnzXQJ+dt3f8VRRAjJE5M2OA7ZYL93f8SxaAu6+RJ7OWw9qrgTcWUbe8IU+RJi1BNxVVt7wgzZEmKUE3DGNvOEGbYwwaQmYPa284UYdiMCAxUvAzHnkDQ/oYISiJWDWvPKGBzUgQpESMGMZecMBGhThohJwdll5w0EaGCFUAs7UIW84UIMjUOReo3rB3rrkDQfrggiDSsCeOuUNL9BFEc6WgG91yxtepAsjHC0B79qQN7xQF0f4UwKe25I3vFgBInQlYLUpbxhAQSJQvF15wyAKNBf1yBsGUrCpqU/eMJgCTkW98oYBFbQ09csbBlXgUrQjbxhYwS+lPXnD4BKI0q68oYBExtK+vKGIhIayHnlDIYn1sT55QzEJnmK98oaCEj1k/fKGohI21yNvKCzx65M3KuE65ZMkSZIkSZJF2Wy+AMdurlOXoaKsAAAAAElFTkSuQmCC";
 
         private string _defaultJavascriptString = ""
-            + "var eventCreatedByVrauz = new Event('messageFromWindow');"
-            + "window.chrome.webview.addEventListener('message', function(event) {"
-            + "  eventCreatedByVrauz.data = event.data;"
-            + "  document.dispatchEvent(eventCreatedByVrauz);"
-            + "});"
-            + "function messageToWindow(key, data) {"
-            + "  postMessageToWindowChromeWebViewCreatedByVrauz(key, data);"
-            + "}"
-            + "function postMessageToWindowChromeWebViewCreatedByVrauz(key, data) {"
-            + "  var message = new Object();"
-            + "  message.key = key;"
-            + "  message.data = data;"
-            + "  if (window.chrome.webview !== undefined)"
-            + "    window.chrome.webview.postMessage(message);"
-            + "}"
-            + "var touchCountCreatedByVrauz = 0;"
-            + "var controlBoxCreatedByVrauz = document.createElement('div');"
-            + "controlBoxCreatedByVrauz.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#FB8633;opacity:0;width:100px;height:100px;position:absolute;';"
-            + "controlBoxCreatedByVrauz.addEventListener('click', function(event) {"
+            //+ "var eventCreatedByApp = new Event('messageFromWindow');"
+            //+ "window.chrome.webview.addEventListener('message', function(event) {"
+            //+ "  eventCreatedByApp.data = event.data;"
+            //+ "  document.dispatchEvent(eventCreatedByApp);"
+            //+ "});"
+            //+ "function messageToWindow(key, data) {"
+            //+ "  postMessageToWindowChromeWebViewCreatedByApp(key, data);"
+            //+ "}"
+            //+ "function postMessageToWindowChromeWebViewCreatedByApp(key, data) {"
+            //+ "  var message = new Object();"
+            //+ "  message.key = key;"
+            //+ "  message.data = data;"
+            //+ "  if (window.chrome.webview !== undefined)"
+            //+ "    window.chrome.webview.postMessage(message);"
+            //+ "}"
+            + "var touchCountCreatedByApp = 0;"
+            + "var controlBoxCreatedByApp = document.createElement('div');"
+            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#FB8633;opacity:0;width:100px;height:100px;position:absolute;';"
+            + "controlBoxCreatedByApp.addEventListener('click', function(event) {"
             + "  event.stopPropagation();"
-            + "  if (touchCountCreatedByVrauz === 0) { setTimeout('checkTouchCountCreatedByVrauz()', 3000); }"
-            + "  touchCountCreatedByVrauz = touchCountCreatedByVrauz + 1;"
-            + "  if (touchCountCreatedByVrauz >= 5) {"
-            + "    controlBoxCreatedByVrauz.style.opacity = 1;"
-            + "    controlBoxCreatedByVrauz.style.width = '100%';"
-            + "    buttonDisplayCreatedByVrauz('inline');"
+            + "  if (touchCountCreatedByApp === 0) { setTimeout('checkTouchCountCreatedByApp()', 3000); }"
+            + "  touchCountCreatedByApp = touchCountCreatedByApp + 1;"
+            + "  if (touchCountCreatedByApp >= 5) {"
+            + "    controlBoxCreatedByApp.style.opacity = 1;"
+            + "    controlBoxCreatedByApp.style.width = '100%';"
+            + "    buttonDisplayCreatedByApp('inline');"
             + "  }"
             + "});"
-            + "function checkTouchCountCreatedByVrauz() {"
-            + "  if (touchCountCreatedByVrauz < 5) {"
-            + "    touchCountCreatedByVrauz = 0;"
-            + "    controlBoxCreatedByVrauz.style.opacity = 0;"
-            + "    controlBoxCreatedByVrauz.style.width = '100px';"
-            + "    buttonDisplayCreatedByVrauz('none');"
+            + "function checkTouchCountCreatedByApp() {"
+            + "  if (touchCountCreatedByApp < 5) {"
+            + "    touchCountCreatedByApp = 0;"
+            + "    controlBoxCreatedByApp.style.opacity = 0;"
+            + "    controlBoxCreatedByApp.style.width = '100px';"
+            + "    buttonDisplayCreatedByApp('none');"
             + "  }"
             + "}"
-            + "function buttonDisplayCreatedByVrauz(display) {"
-            + "  hideButtonCreatedByVrauz.style.display = display;"
-            + "  backButtonCreatedByVrauz.style.display = display;"
-            + "  forwardButtonCreatedByVrauz.style.display = display;"
-            + "  settingButtonCreatedByVrauz.style.display = display;"
-            + "  normalButtonCreatedByVrauz.style.display = display;"
-            + "  fullscreenButtonCreatedByVrauz.style.display = display;"
-            + "  closeButtonCreatedByVrauz.style.display = display;"
+            + "function buttonDisplayCreatedByApp(display) {"
+            + "  hideButtonCreatedByApp.style.display = display;"
+            + "  backButtonCreatedByApp.style.display = display;"
+            + "  forwardButtonCreatedByApp.style.display = display;"
+            + "  normalButtonCreatedByApp.style.display = display;"
+            + "  fullscreenButtonCreatedByApp.style.display = display;"
+            + "  closeButtonCreatedByApp.style.display = display;"
             + "}"
-            + "var buttonStyleCreatedByVrauz = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#FB8633;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
-            + "var hideButtonCreatedByVrauz = document.createElement('button');"
-            + "hideButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz;"
-            + "hideButtonCreatedByVrauz.addEventListener('click', function(event) {"
+            + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#FB8633;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
+            + "var hideButtonCreatedByApp = document.createElement('button');"
+            + "hideButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+            + "hideButtonCreatedByApp.addEventListener('click', function(event) {"
             + "  event.stopPropagation();"
-            + "	 touchCountCreatedByVrauz = 0;"
-            + "	 controlBoxCreatedByVrauz.style.opacity = 0;"
-            + "	 controlBoxCreatedByVrauz.style.width = '100px';"
-            + "	 buttonDisplayCreatedByVrauz('none');"
+            + "	 touchCountCreatedByApp = 0;"
+            + "	 controlBoxCreatedByApp.style.opacity = 0;"
+            + "	 controlBoxCreatedByApp.style.width = '100px';"
+            + "	 buttonDisplayCreatedByApp('none');"
             + "});"
-            + "var backButtonCreatedByVrauz = document.createElement('button');"
-            + "backButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz;"
-            + "backButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAExSURBVHhe7ZlRisJAEAUTcW+43mbX9T6rZ4zVmZdlBZHOl8z0K2iGSPqjChJEp3eyLMslRpe1kPxGrQgh3LwfqBEhRJvvU8aOEILN8yVjRgix5pfipLUxQGiP/C9z1Gr/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXapfMOleQid/kf9pVDf4CVJQP1gBV5YO5snxw0FkWPwI6a78EN6q/D1YiApNlrG+BG0g5AlKOgJQjIOUISDkCUnsiXBlHYByBcQTGERhHYMpHuDGOwDgC4wiMIzAfWh0HpBwBKUdAyhGQcgSkHAGpPRE+tTYWiGUifOn2MUHwVYRv3TY2iD6LUEN+A+H/Ec76uBaIR4Q3/hc5TXfF+/ahyVEEVQAAAABJRU5ErkJggg==\"/>';"
-            + "backButtonCreatedByVrauz.addEventListener('click', function(event) {"
+            + "var backButtonCreatedByApp = document.createElement('button');"
+            + "backButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+            + "backButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAExSURBVHhe7ZlRisJAEAUTcW+43mbX9T6rZ4zVmZdlBZHOl8z0K2iGSPqjChJEp3eyLMslRpe1kPxGrQgh3LwfqBEhRJvvU8aOEILN8yVjRgix5pfipLUxQGiP/C9z1Gr/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXapfMOleQid/kf9pVDf4CVJQP1gBV5YO5snxw0FkWPwI6a78EN6q/D1YiApNlrG+BG0g5AlKOgJQjIOUISDkCUnsiXBlHYByBcQTGERhHYMpHuDGOwDgC4wiMIzAfWh0HpBwBKUdAyhGQcgSkHAGpPRE+tTYWiGUifOn2MUHwVYRv3TY2iD6LUEN+A+H/Ec76uBaIR4Q3/hc5TXfF+/ahyVEEVQAAAABJRU5ErkJggg==\"/>';"
+            + "backButtonCreatedByApp.addEventListener('click', function(event) {"
             + "  window.history.back();"
             + "});"
-            + "var forwardButtonCreatedByVrauz = document.createElement('button');"
-            + "forwardButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz;"
-            + "forwardButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEtSURBVHhe7dZbisJQEEXRROgeo45G0z0fHyOMu+rmBoMi9SdWnQUXH3/7EBOHT5rn+WRn+VgL4ROnqzUCwX+te6PGCIS+iu9yj0Dgf+t8K+cIhB1aX0i+EYj64Zw9L0YjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI+BphNG+Xd5XMY3juA6xW14rOT5eCRUHMOsIFX8Cj6aqV8Cq8gB+M6w6wPokqDjA5jH41bh/2x+hi93Ig3KEG2IU71kxik+BGMV7Vky6+KtnxSg+BWIU71kxik+BmPLxN8+KUXwKxCjes2JSxf9yFB+k+BSIUbxnxSg+DYL2rSskV3xnYa3vrZzxnQW2zpdyx3cW2no3asR3Fty6Xa34zsI/Gz8Md0Ka8CYYPNOuAAAAAElFTkSuQmCC\"/>';"
-            + "forwardButtonCreatedByVrauz.addEventListener('click', function(event) {"
+            + "var forwardButtonCreatedByApp = document.createElement('button');"
+            + "forwardButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+            + "forwardButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEtSURBVHhe7dZbisJQEEXRROgeo45G0z0fHyOMu+rmBoMi9SdWnQUXH3/7EBOHT5rn+WRn+VgL4ROnqzUCwX+te6PGCIS+iu9yj0Dgf+t8K+cIhB1aX0i+EYj64Zw9L0YjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI+BphNG+Xd5XMY3juA6xW14rOT5eCRUHMOsIFX8Cj6aqV8Cq8gB+M6w6wPokqDjA5jH41bh/2x+hi93Ig3KEG2IU71kxik+BGMV7Vky6+KtnxSg+BWIU71kxik+BmPLxN8+KUXwKxCjes2JSxf9yFB+k+BSIUbxnxSg+DYL2rSskV3xnYa3vrZzxnQW2zpdyx3cW2no3asR3Fty6Xa34zsI/Gz8Md0Ka8CYYPNOuAAAAAElFTkSuQmCC\"/>';"
+            + "forwardButtonCreatedByApp.addEventListener('click', function(event) {"
             + "  window.history.forward();"
             + "});"
-            + "var settingButtonCreatedByVrauz = document.createElement('button');"
-            + "settingButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz + 'float:right;';"
-            + "settingButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,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\"/>';"
-            + "settingButtonCreatedByVrauz.addEventListener('click', function(event) {"
-            + "  postMessageToWindowChromeWebViewCreatedByVrauz('ws-setting');"
+            + "var normalButtonCreatedByApp = document.createElement('button');"
+            + "normalButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
+            + "normalButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAENSURBVHhe7dtBSsNAGMXxjBdx4cYL6BUUyZFKS4/lokeoa4W0V5l+w7xVIdVkki58/x8M7wuEMLxFSRPSzZFz7mP95lunN4trDfWSN73r9EkelLYoQGmLApS2KEBpiwKUtihAacu+gBR/InrNU7zE2tZx1E9K6Vlzk9jjEPFUj0btYn3V8e9KAVnz0u5dwCz8BihtUYDSFgUobdkXUO4DFnt6e+Uc9wEfmpvEHj8jHusRAAAAAAAA0KI8EiuvndZwSim9aW4SezxErPJIjHeDSlsUoLRFAUpbFKC0Ve4D5nxp8RprX8dR974P2MQ61nFlsSE+mfkvKEBpiwKUtihAaYsClLYoQGnLvICuuwATWdR/tQ/JbwAAAABJRU5ErkJggg==\"/>';"
+            + "normalButtonCreatedByApp.addEventListener('click', function(event) {"
+            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-normal');"
             + "});"
-            + "var normalButtonCreatedByVrauz = document.createElement('button');"
-            + "normalButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz + 'float:right;';"
-            + "normalButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAENSURBVHhe7dtBSsNAGMXxjBdx4cYL6BUUyZFKS4/lokeoa4W0V5l+w7xVIdVkki58/x8M7wuEMLxFSRPSzZFz7mP95lunN4trDfWSN73r9EkelLYoQGmLApS2KEBpiwKUtihAacu+gBR/InrNU7zE2tZx1E9K6Vlzk9jjEPFUj0btYn3V8e9KAVnz0u5dwCz8BihtUYDSFgUobdkXUO4DFnt6e+Uc9wEfmpvEHj8jHusRAAAAAAAA0KI8EiuvndZwSim9aW4SezxErPJIjHeDSlsUoLRFAUpbFKC0Ve4D5nxp8RprX8dR974P2MQ61nFlsSE+mfkvKEBpiwKUtihAaYsClLYoQGnLvICuuwATWdR/tQ/JbwAAAABJRU5ErkJggg==\"/>';"
-            + "normalButtonCreatedByVrauz.addEventListener('click', function(event) {"
-            + "  postMessageToWindowChromeWebViewCreatedByVrauz('ws-normal');"
+            + "var fullscreenButtonCreatedByApp = document.createElement('button');"
+            + "fullscreenButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
+            + "fullscreenButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAERSURBVHhe7dtBagIxGMXxiYseQ6h2MeeoYG/cYk/SQkHoLXSjX8hzZ9OMMxam7/+D4SUwQnwLmQwxnUJ3H58ppV7jUWKJXxHrMpvWQmmLApS2KEBpiwKUtuwLaH0Q2sT1XYbNjvEgNPQzV8USlxEPZdZsFdeuDCtyAQ2edPtsxJr7svQ6fgOUtihAaYsClLYoQGmLApS27AvIm6EPjWu2U21s/kp8r8eItzIDAAAAAAAALvIrsXwI8TfPM3wlls8HvJdZRdzYgvMB/xUFKG1RgNIWBShtUYDSFgUobbUeln6Ja+hm6BAbqL3Go8QS88Zm6GHpfD7gtQx/1lrALfjb3BxQgNIWBShtUYDSlnkBXXcGGoTV7VEJb6kAAAAASUVORK5CYII=\"/>';"
+            + "fullscreenButtonCreatedByApp.addEventListener('click', function(event) {"
+            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-fullscreen');"
             + "});"
-            + "var fullscreenButtonCreatedByVrauz = document.createElement('button');"
-            + "fullscreenButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz + 'float:right;';"
-            + "fullscreenButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAERSURBVHhe7dtBagIxGMXxiYseQ6h2MeeoYG/cYk/SQkHoLXSjX8hzZ9OMMxam7/+D4SUwQnwLmQwxnUJ3H58ppV7jUWKJXxHrMpvWQmmLApS2KEBpiwKUtuwLaH0Q2sT1XYbNjvEgNPQzV8USlxEPZdZsFdeuDCtyAQ2edPtsxJr7svQ6fgOUtihAaYsClLYoQGmLApS27AvIm6EPjWu2U21s/kp8r8eItzIDAAAAAAAALvIrsXwI8TfPM3wlls8HvJdZRdzYgvMB/xUFKG1RgNIWBShtUYDSFgUobbUeln6Ja+hm6BAbqL3Go8QS88Zm6GHpfD7gtQx/1lrALfjb3BxQgNIWBShtUYDSlnkBXXcGGoTV7VEJb6kAAAAASUVORK5CYII=\"/>';"
-            + "fullscreenButtonCreatedByVrauz.addEventListener('click', function(event) {"
-            + "  postMessageToWindowChromeWebViewCreatedByVrauz('ws-fullscreen');"
+            + "var closeButtonCreatedByApp = document.createElement('button');"
+            + "closeButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
+            + "closeButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKkSURBVHhe7ZtRTuNAEAUjrgAcg3B/KdwBOAZwh1AP/JQgEscez4y7CSX1rtee6el62eVjI29Osd/vH6kddTvcSgsO99QT9TDcGoeFkv+gxDOVNgRml/yrROCdGg+BBcfyJmUIzHwsb86HwINT8iZVCMx6St4ohO2w9BtujMmbFCEw45i8OYTAxRR5EzoEZpsib+S81Sb9hJxDyBCYaY682WnjLfXy9cfpaH2YEJilRP7wQeqCShkCMyyTN7pBpQqBs+vIGz2gUoTAmXXljRZQoUPgrDbyRgupkhDuhhbN4Iy28oYNd1SoEOjdR96wMUwI9Owrb2iwegj0Wkfe0Gi1EOixrryhYfcQ2BtD3tC4WwjsiSVvOKB5CKyNKW84SCHMHVDrL4bAmtjyhgOrh8CzHPKGg6uFwL1c8oYBFofAdU55wyDFIVC55Q0DlYaQX94wWMmnOYe48oYBW4UQX94waO0Q8sgbBq4VQj55w+BLQ8grbxAoDaGL/M3w+z8t4BO83n8CDH69PwQZuJa8yRMCg9aWN/FDYMBW8iZuCAxWIi8h1RzihcBApfL6Ci7dt9I/YJBi+aGFeuQMgQEWyxvdo/KEwMHV5I2eUfFD4MDq8kZrqLghcFAzeaO1VEkIk798KYIDmssb9uj/GOOEQONu8oa9MUKgYXd5Q491Q6DRavKGXuuEQIPV5Q09+4bAxjDyht59QmBDOHnDGW1DYGFYecNZCmHujFo/HgILwssbzqwbAg/SyBvOrhMCN9LJG2ZYFgIXaeUNs5SHwC9/5ZWZkhCetPGB0ltUUwgpb5htzt/mN+r7HUJdUJdCCC1vmHFKCAd5w40tdS6EFPKGWcdC+C1veKAQ/vKrs+flDQuOQ0gpb5j9OITL8oaFepv0Cl6f32w+Aa/AR4WADNL/AAAAAElFTkSuQmCC\" />';"
+            + "closeButtonCreatedByApp.addEventListener('click', function(event) {"
+            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-close');"
             + "});"
-            + "var closeButtonCreatedByVrauz = document.createElement('button');"
-            + "closeButtonCreatedByVrauz.style.cssText = buttonStyleCreatedByVrauz + 'float:right;';"
-            + "closeButtonCreatedByVrauz.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKkSURBVHhe7ZtRTuNAEAUjrgAcg3B/KdwBOAZwh1AP/JQgEscez4y7CSX1rtee6el62eVjI29Osd/vH6kddTvcSgsO99QT9TDcGoeFkv+gxDOVNgRml/yrROCdGg+BBcfyJmUIzHwsb86HwINT8iZVCMx6St4ohO2w9BtujMmbFCEw45i8OYTAxRR5EzoEZpsib+S81Sb9hJxDyBCYaY682WnjLfXy9cfpaH2YEJilRP7wQeqCShkCMyyTN7pBpQqBs+vIGz2gUoTAmXXljRZQoUPgrDbyRgupkhDuhhbN4Iy28oYNd1SoEOjdR96wMUwI9Owrb2iwegj0Wkfe0Gi1EOixrryhYfcQ2BtD3tC4WwjsiSVvOKB5CKyNKW84SCHMHVDrL4bAmtjyhgOrh8CzHPKGg6uFwL1c8oYBFofAdU55wyDFIVC55Q0DlYaQX94wWMmnOYe48oYBW4UQX94waO0Q8sgbBq4VQj55w+BLQ8grbxAoDaGL/M3w+z8t4BO83n8CDH69PwQZuJa8yRMCg9aWN/FDYMBW8iZuCAxWIi8h1RzihcBApfL6Ci7dt9I/YJBi+aGFeuQMgQEWyxvdo/KEwMHV5I2eUfFD4MDq8kZrqLghcFAzeaO1VEkIk798KYIDmssb9uj/GOOEQONu8oa9MUKgYXd5Q491Q6DRavKGXuuEQIPV5Q09+4bAxjDyht59QmBDOHnDGW1DYGFYecNZCmHujFo/HgILwssbzqwbAg/SyBvOrhMCN9LJG2ZYFgIXaeUNs5SHwC9/5ZWZkhCetPGB0ltUUwgpb5htzt/mN+r7HUJdUJdCCC1vmHFKCAd5w40tdS6EFPKGWcdC+C1veKAQ/vKrs+flDQuOQ0gpb5j9OITL8oaFepv0Cl6f32w+Aa/AR4WADNL/AAAAAElFTkSuQmCC\" />';"
-            + "closeButtonCreatedByVrauz.addEventListener('click', function(event) {"
-            + "  postMessageToWindowChromeWebViewCreatedByVrauz('ws-close');"
-            + "});"
-            + "controlBoxCreatedByVrauz.appendChild(hideButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(backButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(forwardButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(closeButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(fullscreenButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(normalButtonCreatedByVrauz);"
-            + "controlBoxCreatedByVrauz.appendChild(settingButtonCreatedByVrauz);"
-            + "document.body.appendChild(controlBoxCreatedByVrauz);"
+            + "controlBoxCreatedByApp.appendChild(hideButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(backButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(forwardButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(fullscreenButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
+            + "document.body.appendChild(controlBoxCreatedByApp);"
         ;
+
+        private bool _isFullScreen;
 
         public MainWindow()
         {
@@ -139,28 +133,26 @@ namespace WpfWebViewApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ApplyFullScreenButtonState();
-            ApplyMaximizeButtonState();
+            _isFullScreen = false;
+
+            ApplyControlBarButtonState();
 
             ShowWebView(Setting.GetInformation());
         }
 
-        private void ApplyFullScreenButtonState()
+        private void ApplyControlBarButtonState()
         {
-            //if (this.WindowState == WindowState.Maximized)
-            //{
-            //    this.MaximizeImage.Visibility = Visibility.Collapsed;
-            //    this.NormalImage.Visibility = Visibility.Visible;
-            //}
-            //else if (this.WindowState == WindowState.Normal)
-            //{
-            //    this.MaximizeImage.Visibility = Visibility.Visible;
-            //    this.NormalImage.Visibility = Visibility.Collapsed;
-            //}
-        }
+            if (_isFullScreen) 
+            { 
+                this.FullScreenExitImage.Visibility = Visibility.Visible;
+                this.FullScreenImage.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.FullScreenExitImage.Visibility = Visibility.Collapsed;
+                this.FullScreenImage.Visibility = Visibility.Visible;
+            }
 
-        private void ApplyMaximizeButtonState()
-        {
             if (this.WindowState == WindowState.Maximized)
             {
                 this.MaximizeImage.Visibility = Visibility.Collapsed;
@@ -203,14 +195,6 @@ namespace WpfWebViewApp
             return "net45 under";
         }
 
-        private void TopBorder_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
-        }
-
         private void ShowWebView(Setting si)
         {
             this.BusyIndicator.IsBusy = true;
@@ -218,17 +202,17 @@ namespace WpfWebViewApp
             switch (si.WebViewType)
             {
                 case WebViewType.Edge:
-                    if (this.WV2 != null) this.WV2.Visibility = Visibility.Visible;
-                    if (this.CEF != null) this.CEF.Visibility = Visibility.Hidden;
-                    if (this.WV2 != null) this.WV2.Source = new Uri(si.Url);
+                    this.WV2.Visibility = Visibility.Visible;
+                    this.CEF.Visibility = Visibility.Hidden;
+                    this.WV2.Source = new Uri(si.Url);
                     this.WebViewVersion.Text = CoreWebView2Environment.GetAvailableBrowserVersionString();
                     this.EdgeImage.Visibility = Visibility.Visible;
                     this.ChromeImage.Visibility = Visibility.Collapsed;
                     break;
                 case WebViewType.Chrome:
-                    if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
-                    if (this.CEF != null) this.CEF.Visibility = Visibility.Visible;
-                    if (this.CEF != null) this.CEF.Address = si.Url;
+                    this.WV2.Visibility = Visibility.Hidden;
+                    this.CEF.Visibility = Visibility.Visible;
+                    this.CEF.Address = si.Url;
                     this.WebViewVersion.Text = Cef.ChromiumVersion;
                     this.EdgeImage.Visibility = Visibility.Collapsed;
                     this.ChromeImage.Visibility = Visibility.Visible;
@@ -247,6 +231,48 @@ namespace WpfWebViewApp
                 {
                     this.DotNetVersion.Text = "(net45 under)";
                 }
+            }
+        }
+
+        private string GetJavascriptAllString()
+        {
+            string position = string.Empty;
+            string image = string.Empty;
+
+            Setting st = Setting.GetInformation();
+
+            switch (st.Position)
+            {
+                case 0:
+                    position = "top:0;left:0;";
+                    image = _base64UpImg;
+                    break;
+                case 1:
+                    position = "top:0;right:0;";
+                    image = _base64UpImg;
+                    break;
+                case 2:
+                    position = "bottom:0;left:0;";
+                    image = _base64DownImg;
+                    break;
+                case 3:
+                    position = "bottom:0;right:0;";
+                    image = _base64DownImg;
+                    break;
+            }
+
+            string jsString = _defaultJavascriptString;
+            jsString += string.Format("controlBoxCreatedByApp.style.cssText += '{0}';", position);
+            jsString += string.Format("hideButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"{0}\"/>';", image);
+
+            return jsString;
+        }
+
+        private void ControlBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
             }
         }
 
@@ -309,13 +335,20 @@ namespace WpfWebViewApp
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
+            _isFullScreen = !_isFullScreen;
 
-            //if (this.WindowState == WindowState.Maximized)
-            //    this.WindowState = WindowState.Normal;
-            //else if (this.WindowState == WindowState.Normal)
-            //    this.WindowState = WindowState.Maximized;
+            if (_isFullScreen)
+            {
+                this.WindowState = WindowState.Maximized;
+                this.ControlBar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.WindowState = WindowState.Normal;
+                this.ControlBar.Visibility = Visibility.Visible;
+            }
 
-            ApplyFullScreenButtonState();
+            ApplyControlBarButtonState();
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -330,7 +363,7 @@ namespace WpfWebViewApp
             else if (this.WindowState == WindowState.Normal)
                 this.WindowState = WindowState.Maximized;
 
-            ApplyMaximizeButtonState();
+            ApplyControlBarButtonState();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -342,6 +375,7 @@ namespace WpfWebViewApp
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
+                this.WV2.ExecuteScriptAsync(GetJavascriptAllString());
                 this.BusyIndicator.IsBusy = false;
             }));
         }
@@ -352,9 +386,9 @@ namespace WpfWebViewApp
             {
                 this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
+                    this.CEF.GetMainFrame().ExecuteJavaScriptAsync(GetJavascriptAllString());
                     this.BusyIndicator.IsBusy = false;
-                }));
-                
+                }));               
             }
         }
 
