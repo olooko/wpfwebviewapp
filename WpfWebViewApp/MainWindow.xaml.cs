@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml.Linq;
 
 namespace WpfWebViewApp
@@ -141,74 +142,6 @@ namespace WpfWebViewApp
             ApplyMaximizeButtonState();
 
             ShowWebView(Setting.GetInformation());
-
-            /*
-            if (System.Environment.Is64BitOperatingSystem)
-            {
-                RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
-
-                RegistryKey registryKey = baseKey.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}");
-
-                if (registryKey != null)
-                {
-                    MessageBox.Show("x64 LocalMachine 설치");
-                }
-
-                baseKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64);
-
-                registryKey = baseKey.OpenSubKey(@"SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}");
-
-                if (registryKey != null)
-                {
-                    MessageBox.Show("x64 CurrentUser 설치");
-                }
-            }
-            else
-            {
-                RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
-
-                RegistryKey registryKey = baseKey.OpenSubKey(@"SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}");
-
-                if (registryKey != null)
-                {
-                    MessageBox.Show("x86 LocalMachine 설치");
-                }
-
-                baseKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64);
-
-                registryKey = baseKey.OpenSubKey(@"SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}");
-
-                if (registryKey != null)
-                {
-                    MessageBox.Show("x86 CurrentUser 설치");
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-            const string subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
-
-            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(subkey))
-            {
-                if (ndpKey != null && ndpKey.GetValue("Release") != null)
-                {
-                    MessageBox.Show($".NET Framework Version: {CheckFor45PlusVersion((int)ndpKey.GetValue("Release"))}");
-                }
-                else
-                {
-                    MessageBox.Show(".NET Framework Version 4.5 or later is not detected.");
-                }
-            }
-            */
         }
 
         private void ApplyMaximizeButtonState()
@@ -229,35 +162,30 @@ namespace WpfWebViewApp
         string CheckFor45PlusVersion(int releaseKey)
         {
             if (releaseKey >= 533320)
-                return "4.8.1 or later";
+                return "net481";
             if (releaseKey >= 528040)
-                return "4.8";
+                return "net48";
             if (releaseKey >= 461808)
-                return "4.7.2";
+                return "net472";
             if (releaseKey >= 461308)
-                return "4.7.1";
+                return "net471";
             if (releaseKey >= 460798)
-                return "4.7";
+                return "net47";
             if (releaseKey >= 394802)
-                return "4.6.2";
+                return "net462";
             if (releaseKey >= 394254)
-                return "4.6.1";
+                return "net461";
             if (releaseKey >= 393295)
-                return "4.6";
+                return "net46";
             if (releaseKey >= 379893)
-                return "4.5.2";
+                return "net452";
             if (releaseKey >= 378675)
-                return "4.5.1";
+                return "net451";
             if (releaseKey >= 378389)
-                return "4.5";
+                return "net45";
             // This code should never execute. A non-null release key should mean
             // that 4.5 or later is installed.
-            return "No 4.5 or later version detected";
-        }
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton rb = sender as RadioButton;
+            return "net45 under";
         }
 
         private void TopBorder_MouseDown(object sender, MouseButtonEventArgs e)
@@ -270,26 +198,40 @@ namespace WpfWebViewApp
 
         private void ShowWebView(Setting si)
         {
+            this.BusyIndicator.IsBusy = true;
+
             switch (si.WebViewType)
             {
                 case WebViewType.Edge:
                     if (this.WV2 != null) this.WV2.Visibility = Visibility.Visible;
                     if (this.CEF != null) this.CEF.Visibility = Visibility.Hidden;
+                    if (this.WV2 != null) this.WV2.Source = new Uri(si.Url);
+                    this.WebViewVersion.Text = CoreWebView2Environment.GetAvailableBrowserVersionString();
+                    this.EdgeImage.Visibility = Visibility.Visible;
+                    this.ChromeImage.Visibility = Visibility.Collapsed;
                     break;
                 case WebViewType.Chrome:
                     if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
                     if (this.CEF != null) this.CEF.Visibility = Visibility.Visible;
+                    if (this.CEF != null) this.CEF.Address = si.Url;
+                    this.WebViewVersion.Text = Cef.ChromiumVersion;
+                    this.EdgeImage.Visibility = Visibility.Collapsed;
+                    this.ChromeImage.Visibility = Visibility.Visible;
                     break;
             }
 
-            switch (si.WebViewType)
+            const string subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
+
+            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(subkey))
             {
-                case WebViewType.Edge:
-                    if (this.WV2 != null) this.WV2.Source = new Uri(si.Url);
-                    break;
-                case WebViewType.Chrome:
-                    if (this.CEF != null) this.CEF.Address = si.Url;
-                    break;
+                if (ndpKey != null && ndpKey.GetValue("Release") != null)
+                {
+                    this.DotNetVersion.Text = string.Format("({0})", CheckFor45PlusVersion((int)ndpKey.GetValue("Release")));
+                }
+                else
+                {
+                    this.DotNetVersion.Text = "(net45 under)";
+                }
             }
         }
 
@@ -333,35 +275,6 @@ namespace WpfWebViewApp
             this.Close();
         }
 
-        private void WV2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
-        {
-            string s = e.TryGetWebMessageAsString();
-            MessageBox.Show(s);
-        }
-
-        private void CEF_JavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
-        {
-            string s = e.Message as string;
-            MessageBox.Show(s);
-        }
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if ((bool)this.Edge.IsChecked)
-        //    {
-        //        this.WV2.CoreWebView2.PostWebMessageAsString("WV2 Alert!!");
-        //    }
-
-        //    if ((bool)this.Chrome.IsChecked)
-        //    {
-        //       //if (this.CEF != null) this.CEF.ShowDevTools();
-
-        //        string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
-
-        //        this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
-        //    }
-        //}
-
         private void SettingViewButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
@@ -398,5 +311,58 @@ namespace WpfWebViewApp
 
             ShowWebView(Setting.GetInformation());
         }
+
+        private void WV2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                this.BusyIndicator.IsBusy = false;
+            }));
+        }
+
+        private void CEF_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (e.IsLoading == false)
+            {
+                this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+                {
+                    this.BusyIndicator.IsBusy = false;
+                }));
+                
+            }
+        }
+
+        private void WV2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            string s = e.TryGetWebMessageAsString();
+            MessageBox.Show(s);
+        }
+
+        private void CEF_JavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
+        {
+            string s = e.Message as string;
+            MessageBox.Show(s);
+        }
+
+
+        // Application to javascript
+        //
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if ((bool)this.Edge.IsChecked)
+        //    {
+        //        this.WV2.CoreWebView2.PostWebMessageAsString("WV2 Alert!!");
+        //    }
+
+        //    if ((bool)this.Chrome.IsChecked)
+        //    {
+        //       //if (this.CEF != null) this.CEF.ShowDevTools();
+
+        //        string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
+
+        //        this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
+        //    }
+        //}
+
     }
 }

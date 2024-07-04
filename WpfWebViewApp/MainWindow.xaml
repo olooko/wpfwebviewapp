@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        xmlns:busyIndicator="https://github.com/moh3ngolshani/BusyIndicator"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -111,8 +112,13 @@
             </Grid.RowDefinitions>
             <Border CornerRadius="4,4,0,0" BorderThickness="0" Background="White" MouseDown="TopBorder_MouseDown">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="7,0,0,7">
-
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,0,0,0">
+                        <Image x:Name="EdgeImage" Source="/Images/icon_edge.png" Width="32" Height="32" />
+                        <Image x:Name="ChromeImage" Source="/Images/icon_chrome.png" Width="32" Height="32" />
+                        <Rectangle Width="10" />
+                        <TextBlock x:Name="WebViewVersion" VerticalAlignment="Center" />
+                        <Rectangle Width="4" />
+                        <TextBlock x:Name="DotNetVersion" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Style="{StaticResource ControlBarButton}" Click="SettingViewButton_Click">
@@ -138,8 +144,28 @@
                     </Rectangle>
                 </Grid>
             </Border>
-            <wv2:WebView2 x:Name="WV2" Grid.Row="1" Visibility="Hidden" WebMessageReceived="WV2_WebMessageReceived" />
-            <cef:ChromiumWebBrowser x:Name="CEF" Grid.Row="1" Visibility="Hidden" JavascriptMessageReceived="CEF_JavascriptMessageReceived" />
+            
+            <wv2:WebView2 x:Name="WV2" 
+                          Grid.Row="1" 
+                          Visibility="Hidden" 
+                          WebMessageReceived="WV2_WebMessageReceived"
+                          NavigationCompleted="WV2_NavigationCompleted" />
+            
+            <cef:ChromiumWebBrowser x:Name="CEF" 
+                                    Grid.Row="1" 
+                                    Visibility="Hidden" 
+                                    JavascriptMessageReceived="CEF_JavascriptMessageReceived"
+                                    LoadingStateChanged="CEF_LoadingStateChanged" />
+
+            <busyIndicator:BusyMask x:Name="BusyIndicator" 
+                                    Grid.Row="1"
+                                    IsBusy="False" 
+                                    IndicatorType="DotCircle" 
+                                    BusyContent="Please wait..." 
+                                    BusyContentMargin="0,20,0,0" 
+                                    Background="White"
+                                    IsBusyAtStartup="False" />
+
             <Grid x:Name="SettingGrid" Grid.Row="1" Background="White" Visibility="Hidden">
                 <StackPanel Width="400" VerticalAlignment="Center">
                     <Label Content="WebView Type"/>

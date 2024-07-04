@@ -98,6 +98,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BusyIndicators">
+      <Version>2.1.2</Version>
+    </PackageReference>
     <PackageReference Include="CefSharp.Wpf">
       <Version>126.2.70</Version>
     </PackageReference>
@@ -115,6 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icon_setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_chrome.png" />
+    <Resource Include="Images\icon_edge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
