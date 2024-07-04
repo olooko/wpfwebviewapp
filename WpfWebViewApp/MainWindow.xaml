@@ -33,7 +33,7 @@
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="MouseOver">
                                         <Storyboard>
-                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#BBBBBB" />
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#88BBBBBB" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -112,14 +112,12 @@
             <Border CornerRadius="4,4,0,0" BorderThickness="0" Background="White" MouseDown="TopBorder_MouseDown">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="7,0,0,7">
-                        <RadioButton Style="{StaticResource ControlBarRadioButton}" GroupName="WebView" Name="Edge" Checked="RadioButton_Checked" IsChecked="True">
-                            <TextBlock Text="Edge" />
-                        </RadioButton>
-                        <RadioButton Style="{StaticResource ControlBarRadioButton}" GroupName="WebView" Name="Chrome" Checked="RadioButton_Checked">
-                            <TextBlock Text="Chrome" />
-                        </RadioButton>
+
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource ControlBarButton}" Click="SettingViewButton_Click">
+                            <Image Source="/Images/icon_setting.png" />
+                        </Button>
                         <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
                             <Image Source="/Images/icon_minimize.png" />
                         </Button>
@@ -140,8 +138,35 @@
                     </Rectangle>
                 </Grid>
             </Border>
-            <wv2:WebView2 x:Name="WV2" Grid.Row="1" Source="https://erasebg.cafe24.com" Visibility="Visible" WebMessageReceived="WV2_WebMessageReceived" />
-            <cef:ChromiumWebBrowser x:Name="CEF" Grid.Row="1" Address="https://erasebg.cafe24.com" Visibility="Collapsed" JavascriptMessageReceived="CEF_JavascriptMessageReceived" />
+            <wv2:WebView2 x:Name="WV2" Grid.Row="1" Visibility="Hidden" WebMessageReceived="WV2_WebMessageReceived" />
+            <cef:ChromiumWebBrowser x:Name="CEF" Grid.Row="1" Visibility="Hidden" JavascriptMessageReceived="CEF_JavascriptMessageReceived" />
+            <Grid x:Name="SettingGrid" Grid.Row="1" Background="White" Visibility="Hidden">
+                <StackPanel Width="400" VerticalAlignment="Center">
+                    <Label Content="WebView Type"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton GroupName="WebView" Name="Edge">
+                            <TextBlock Text="Edge" />
+                        </RadioButton>
+                        <Rectangle Width="10" />
+                        <RadioButton GroupName="WebView" Name="Chrome">
+                            <TextBlock Text="Chrome" />
+                        </RadioButton>
+                    </StackPanel>
+                    <Rectangle Height="10" />
+                    <Label Content="Source URL"/>
+                    <TextBox x:Name="SettingUrl" />
+                    <Rectangle Height="10" />
+                    <Label Content="Touch Position for ControlBox" />
+                    <ComboBox x:Name="SettingPosition">
+                        <ComboBoxItem Content="TopLeft" />
+                        <ComboBoxItem Content="TopRight" />
+                        <ComboBoxItem Content="BottomLeft" />
+                        <ComboBoxItem Content="BottomRight" />
+                    </ComboBox>
+                    <Rectangle Height="20" />
+                    <Button Content="Save" Height="30" Click="SettingSaveButton_Click" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </Window>

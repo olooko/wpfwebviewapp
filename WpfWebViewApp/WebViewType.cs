@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfWebViewApp
 {
-    public enum WebViewName
+    public enum WebViewType
     {
         Edge, Chrome
     }

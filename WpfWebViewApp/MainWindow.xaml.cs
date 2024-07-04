@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace WpfWebViewApp
 {
@@ -129,7 +131,6 @@ namespace WpfWebViewApp
             + "document.body.appendChild(controlBoxCreatedByVrauz);"
         ;
 
-
         public MainWindow()
         {
             InitializeComponent();   
@@ -138,6 +139,8 @@ namespace WpfWebViewApp
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ApplyMaximizeButtonState();
+
+            ShowWebView(Setting.GetInformation());
 
             /*
             if (System.Environment.Is64BitOperatingSystem)
@@ -255,8 +258,6 @@ namespace WpfWebViewApp
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton rb = sender as RadioButton;
-
-            ShowWebView((WebViewName)Enum.Parse(typeof(WebViewName), rb.Name));
         }
 
         private void TopBorder_MouseDown(object sender, MouseButtonEventArgs e)
@@ -267,17 +268,27 @@ namespace WpfWebViewApp
             }
         }
 
-        private void ShowWebView(WebViewName name)
+        private void ShowWebView(Setting si)
         {
-            switch (name)
+            switch (si.WebViewType)
             {
-                case WebViewName.Edge:
+                case WebViewType.Edge:
                     if (this.WV2 != null) this.WV2.Visibility = Visibility.Visible;
-                    if (this.CEF != null) this.CEF.Visibility = Visibility.Collapsed;
+                    if (this.CEF != null) this.CEF.Visibility = Visibility.Hidden;
                     break;
-                case WebViewName.Chrome:
-                    if (this.WV2 != null) this.WV2.Visibility = Visibility.Collapsed;
+                case WebViewType.Chrome:
+                    if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
                     if (this.CEF != null) this.CEF.Visibility = Visibility.Visible;
+                    break;
+            }
+
+            switch (si.WebViewType)
+            {
+                case WebViewType.Edge:
+                    if (this.WV2 != null) this.WV2.Source = new Uri(si.Url);
+                    break;
+                case WebViewType.Chrome:
+                    if (this.CEF != null) this.CEF.Address = si.Url;
                     break;
             }
         }
@@ -334,21 +345,58 @@ namespace WpfWebViewApp
             MessageBox.Show(s);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if ((bool)this.Edge.IsChecked)
+        //    {
+        //        this.WV2.CoreWebView2.PostWebMessageAsString("WV2 Alert!!");
+        //    }
+
+        //    if ((bool)this.Chrome.IsChecked)
+        //    {
+        //       //if (this.CEF != null) this.CEF.ShowDevTools();
+
+        //        string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
+
+        //        this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
+        //    }
+        //}
+
+        private void SettingViewButton_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)this.Edge.IsChecked)
+            if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
+            if (this.CEF != null) this.CEF.Visibility = Visibility.Hidden;
+
+            this.SettingGrid.Visibility = Visibility.Visible;
+
+            Setting st = Setting.GetInformation();
+
+            switch (st.WebViewType)
             {
-                this.WV2.CoreWebView2.PostWebMessageAsString("WV2 Alert!!");
+                case WebViewType.Edge:
+                    this.Edge.IsChecked = true;
+                    break;
+                case WebViewType.Chrome:
+                    this.Chrome.IsChecked = true;
+                    break;
             }
 
-            if ((bool)this.Chrome.IsChecked)
-            {
-               //if (this.CEF != null) this.CEF.ShowDevTools();
+            this.SettingUrl.Text = st.Url;
+            this.SettingPosition.SelectedIndex = st.Position;
+        }
 
-                string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
-                 
-                this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
-            }
+        private void SettingSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            WebViewType webviewType = WebViewType.Edge;
+
+            if (this.Chrome.IsChecked == true)
+                webviewType = WebViewType.Chrome;
+
+            Setting.Save(webviewType, this.SettingUrl.Text, this.SettingPosition.SelectedIndex);
+
+            this.SettingGrid.Visibility = Visibility.Hidden;
+
+            ShowWebView(Setting.GetInformation());
         }
     }
 }
