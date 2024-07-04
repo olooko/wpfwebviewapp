@@ -123,5 +123,9 @@
     <Resource Include="Images\icon_chrome.png" />
     <Resource Include="Images\icon_edge.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_fullscreen.png" />
+    <Resource Include="Images\icon_fullscreen_exit.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

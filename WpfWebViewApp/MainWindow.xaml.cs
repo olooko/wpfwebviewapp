@@ -139,9 +139,24 @@ namespace WpfWebViewApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ApplyFullScreenButtonState();
             ApplyMaximizeButtonState();
 
             ShowWebView(Setting.GetInformation());
+        }
+
+        private void ApplyFullScreenButtonState()
+        {
+            //if (this.WindowState == WindowState.Maximized)
+            //{
+            //    this.MaximizeImage.Visibility = Visibility.Collapsed;
+            //    this.NormalImage.Visibility = Visibility.Visible;
+            //}
+            //else if (this.WindowState == WindowState.Normal)
+            //{
+            //    this.MaximizeImage.Visibility = Visibility.Visible;
+            //    this.NormalImage.Visibility = Visibility.Collapsed;
+            //}
         }
 
         private void ApplyMaximizeButtonState()
@@ -255,26 +270,6 @@ namespace WpfWebViewApp
             }
         }
 
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-                this.WindowState = WindowState.Normal;
-            else if (this.WindowState == WindowState.Normal)
-                this.WindowState = WindowState.Maximized;
-
-            ApplyMaximizeButtonState();
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void SettingViewButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.WV2 != null) this.WV2.Visibility = Visibility.Hidden;
@@ -310,6 +305,37 @@ namespace WpfWebViewApp
             this.SettingGrid.Visibility = Visibility.Hidden;
 
             ShowWebView(Setting.GetInformation());
+        }
+
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            //if (this.WindowState == WindowState.Maximized)
+            //    this.WindowState = WindowState.Normal;
+            //else if (this.WindowState == WindowState.Normal)
+            //    this.WindowState = WindowState.Maximized;
+
+            ApplyFullScreenButtonState();
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = WindowState.Normal;
+            else if (this.WindowState == WindowState.Normal)
+                this.WindowState = WindowState.Maximized;
+
+            ApplyMaximizeButtonState();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private void WV2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)

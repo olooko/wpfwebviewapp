@@ -124,6 +124,12 @@
                         <Button Style="{StaticResource ControlBarButton}" Click="SettingViewButton_Click">
                             <Image Source="/Images/icon_setting.png" />
                         </Button>
+                        <Button Style="{StaticResource ControlBarButton}" Click="FullScreenButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="FullScreenImage" Source="/Images/icon_fullscreen.png" />
+                                <Image x:Name="FullScreenExitImage" Source="/Images/icon_fullscreen_exit.png" />
+                            </StackPanel>
+                        </Button>
                         <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
                             <Image Source="/Images/icon_minimize.png" />
                         </Button>
