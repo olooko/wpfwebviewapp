@@ -12,7 +12,7 @@ namespace WpfWebViewApp
     {
         public const string XML_FILE = "Setting.xml";
         public const WebViewType DEFAULT_WEBVIEW = WebViewType.Edge;
-        public const string DEFAULT_URL = "https://erasebg.cafe24.com";
+        public const string DEFAULT_URL = "https://www.microsoft.com/edge";
         public const string DEFAULT_POS = "0";
 
         public WebViewType WebViewType { get; }

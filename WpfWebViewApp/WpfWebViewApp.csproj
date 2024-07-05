@@ -130,5 +130,8 @@
     <Resource Include="Images\icon_fullscreen.png" />
     <Resource Include="Images\icon_fullscreen_exit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon_send.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
