@@ -1,11 +1,13 @@
 ﻿using CefSharp;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,24 +33,16 @@ namespace WpfWebViewApp
         private string _base64DownImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHzSURBVHhe7ZBLUsMwEESzYJ978FkDR88NuAMngBWcIHSb7gJCEtsT2ZaceVVKObY06tebJEmSJEmSJEmS5ID9fn+jx2YJO+DgM9Yr1q1eNQeyP8jhUa+GgQOU/8Qib1jNlYDMlH+nAPjAGlYCNj5hWd40VQKy/pY3/SVgwzF500QJyHhM3pwugR+wTsmbqktAtnPy5n8JfIHVJ2+qLAGZhsibnxL4gDVU3rCEu25ABSDLGHnzXQJ+dt3f8VRRAjJE5M2OA7ZYL93f8SxaAu6+RJ7OWw9qrgTcWUbe8IU+RJi1BNxVVt7wgzZEmKUE3DGNvOEGbYwwaQmYPa284UYdiMCAxUvAzHnkDQ/oYISiJWDWvPKGBzUgQpESMGMZecMBGhThohJwdll5w0EaGCFUAs7UIW84UIMjUOReo3rB3rrkDQfrggiDSsCeOuUNL9BFEc6WgG91yxtepAsjHC0B79qQN7xQF0f4UwKe25I3vFgBInQlYLUpbxhAQSJQvF15wyAKNBf1yBsGUrCpqU/eMJgCTkW98oYBFbQ09csbBlXgUrQjbxhYwS+lPXnD4BKI0q68oYBExtK+vKGIhIayHnlDIYn1sT55QzEJnmK98oaCEj1k/fKGohI21yNvKCzx65M3KuE65ZMkSZIkSZJF2Wy+AMdurlOXoaKsAAAAAElFTkSuQmCC";
 
         private string _defaultJavascriptString = ""
-            //+ "var eventCreatedByApp = new Event('messageFromWindow');"
-            //+ "window.chrome.webview.addEventListener('message', function(event) {"
-            //+ "  eventCreatedByApp.data = event.data;"
-            //+ "  document.dispatchEvent(eventCreatedByApp);"
-            //+ "});"
-            //+ "function messageToWindow(key, data) {"
-            //+ "  postMessageToWindowChromeWebViewCreatedByApp(key, data);"
-            //+ "}"
-            //+ "function postMessageToWindowChromeWebViewCreatedByApp(key, data) {"
-            //+ "  var message = new Object();"
-            //+ "  message.key = key;"
-            //+ "  message.data = data;"
-            //+ "  if (window.chrome.webview !== undefined)"
-            //+ "    window.chrome.webview.postMessage(message);"
-            //+ "}"
+            + "function postMessageToAppCreatedByApp(key, data) {"
+            + "  var webmessage = new Object();"
+            + "  webmessage.key = key;"
+            + "  webmessage.data = data;"
+            + "  if (window.chrome.webview) window.chrome.webview.postMessage(JSON.stringify(webmessage));"
+            + "  if (window.hasOwnProperty('CefSharp')) CefSharp.PostMessage(JSON.stringify(webmessage));"
+            + "}"
             + "var touchCountCreatedByApp = 0;"
             + "var controlBoxCreatedByApp = document.createElement('div');"
-            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#FB8633;opacity:0;width:100px;height:100px;position:absolute;';"
+            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#FB8633;opacity:0;width:100px;height:100px;position:absolute;display:flex;';"
             + "controlBoxCreatedByApp.addEventListener('click', function(event) {"
             + "  event.stopPropagation();"
             + "  if (touchCountCreatedByApp === 0) { setTimeout('checkTouchCountCreatedByApp()', 3000); }"
@@ -69,10 +63,7 @@ namespace WpfWebViewApp
             + "}"
             + "function buttonDisplayCreatedByApp(display) {"
             + "  hideButtonCreatedByApp.style.display = display;"
-            + "  backButtonCreatedByApp.style.display = display;"
-            + "  forwardButtonCreatedByApp.style.display = display;"
             + "  normalButtonCreatedByApp.style.display = display;"
-            + "  fullscreenButtonCreatedByApp.style.display = display;"
             + "  closeButtonCreatedByApp.style.display = display;"
             + "}"
             + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#FB8633;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
@@ -85,42 +76,21 @@ namespace WpfWebViewApp
             + "	 controlBoxCreatedByApp.style.width = '100px';"
             + "	 buttonDisplayCreatedByApp('none');"
             + "});"
-            + "var backButtonCreatedByApp = document.createElement('button');"
-            + "backButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
-            + "backButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAExSURBVHhe7ZlRisJAEAUTcW+43mbX9T6rZ4zVmZdlBZHOl8z0K2iGSPqjChJEp3eyLMslRpe1kPxGrQgh3LwfqBEhRJvvU8aOEILN8yVjRgix5pfipLUxQGiP/C9z1Gr/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXav8gY/kkltdq/yBj+SSW12r/IGP5JJbXapfMOleQid/kf9pVDf4CVJQP1gBV5YO5snxw0FkWPwI6a78EN6q/D1YiApNlrG+BG0g5AlKOgJQjIOUISDkCUnsiXBlHYByBcQTGERhHYMpHuDGOwDgC4wiMIzAfWh0HpBwBKUdAyhGQcgSkHAGpPRE+tTYWiGUifOn2MUHwVYRv3TY2iD6LUEN+A+H/Ec76uBaIR4Q3/hc5TXfF+/ahyVEEVQAAAABJRU5ErkJggg==\"/>';"
-            + "backButtonCreatedByApp.addEventListener('click', function(event) {"
-            + "  window.history.back();"
-            + "});"
-            + "var forwardButtonCreatedByApp = document.createElement('button');"
-            + "forwardButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
-            + "forwardButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEtSURBVHhe7dZbisJQEEXRROgeo45G0z0fHyOMu+rmBoMi9SdWnQUXH3/7EBOHT5rn+WRn+VgL4ROnqzUCwX+te6PGCIS+iu9yj0Dgf+t8K+cIhB1aX0i+EYj64Zw9L0YjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI0AjQCNAI+BphNG+Xd5XMY3juA6xW14rOT5eCRUHMOsIFX8Cj6aqV8Cq8gB+M6w6wPokqDjA5jH41bh/2x+hi93Ig3KEG2IU71kxik+BGMV7Vky6+KtnxSg+BWIU71kxik+BmPLxN8+KUXwKxCjes2JSxf9yFB+k+BSIUbxnxSg+DYL2rSskV3xnYa3vrZzxnQW2zpdyx3cW2no3asR3Fty6Xa34zsI/Gz8Md0Ka8CYYPNOuAAAAAElFTkSuQmCC\"/>';"
-            + "forwardButtonCreatedByApp.addEventListener('click', function(event) {"
-            + "  window.history.forward();"
-            + "});"
             + "var normalButtonCreatedByApp = document.createElement('button');"
-            + "normalButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
+            + "normalButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
             + "normalButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAENSURBVHhe7dtBSsNAGMXxjBdx4cYL6BUUyZFKS4/lokeoa4W0V5l+w7xVIdVkki58/x8M7wuEMLxFSRPSzZFz7mP95lunN4trDfWSN73r9EkelLYoQGmLApS2KEBpiwKUtihAacu+gBR/InrNU7zE2tZx1E9K6Vlzk9jjEPFUj0btYn3V8e9KAVnz0u5dwCz8BihtUYDSFgUobdkXUO4DFnt6e+Uc9wEfmpvEHj8jHusRAAAAAAAA0KI8EiuvndZwSim9aW4SezxErPJIjHeDSlsUoLRFAUpbFKC0Ve4D5nxp8RprX8dR974P2MQ61nFlsSE+mfkvKEBpiwKUtihAaYsClLYoQGnLvICuuwATWdR/tQ/JbwAAAABJRU5ErkJggg==\"/>';"
             + "normalButtonCreatedByApp.addEventListener('click', function(event) {"
-            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-normal');"
-            + "});"
-            + "var fullscreenButtonCreatedByApp = document.createElement('button');"
-            + "fullscreenButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
-            + "fullscreenButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAERSURBVHhe7dtBagIxGMXxiYseQ6h2MeeoYG/cYk/SQkHoLXSjX8hzZ9OMMxam7/+D4SUwQnwLmQwxnUJ3H58ppV7jUWKJXxHrMpvWQmmLApS2KEBpiwKUtuwLaH0Q2sT1XYbNjvEgNPQzV8USlxEPZdZsFdeuDCtyAQ2edPtsxJr7svQ6fgOUtihAaYsClLYoQGmLApS27AvIm6EPjWu2U21s/kp8r8eItzIDAAAAAAAALvIrsXwI8TfPM3wlls8HvJdZRdzYgvMB/xUFKG1RgNIWBShtUYDSFgUobbUeln6Ja+hm6BAbqL3Go8QS88Zm6GHpfD7gtQx/1lrALfjb3BxQgNIWBShtUYDSlnkBXXcGGoTV7VEJb6kAAAAASUVORK5CYII=\"/>';"
-            + "fullscreenButtonCreatedByApp.addEventListener('click', function(event) {"
-            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-fullscreen');"
+            + "  postMessageToAppCreatedByApp('wm-normal');"
             + "});"
             + "var closeButtonCreatedByApp = document.createElement('button');"
-            + "closeButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp + 'float:right;';"
+            + "closeButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
             + "closeButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKkSURBVHhe7ZtRTuNAEAUjrgAcg3B/KdwBOAZwh1AP/JQgEscez4y7CSX1rtee6el62eVjI29Osd/vH6kddTvcSgsO99QT9TDcGoeFkv+gxDOVNgRml/yrROCdGg+BBcfyJmUIzHwsb86HwINT8iZVCMx6St4ohO2w9BtujMmbFCEw45i8OYTAxRR5EzoEZpsib+S81Sb9hJxDyBCYaY682WnjLfXy9cfpaH2YEJilRP7wQeqCShkCMyyTN7pBpQqBs+vIGz2gUoTAmXXljRZQoUPgrDbyRgupkhDuhhbN4Iy28oYNd1SoEOjdR96wMUwI9Owrb2iwegj0Wkfe0Gi1EOixrryhYfcQ2BtD3tC4WwjsiSVvOKB5CKyNKW84SCHMHVDrL4bAmtjyhgOrh8CzHPKGg6uFwL1c8oYBFofAdU55wyDFIVC55Q0DlYaQX94wWMmnOYe48oYBW4UQX94waO0Q8sgbBq4VQj55w+BLQ8grbxAoDaGL/M3w+z8t4BO83n8CDH69PwQZuJa8yRMCg9aWN/FDYMBW8iZuCAxWIi8h1RzihcBApfL6Ci7dt9I/YJBi+aGFeuQMgQEWyxvdo/KEwMHV5I2eUfFD4MDq8kZrqLghcFAzeaO1VEkIk798KYIDmssb9uj/GOOEQONu8oa9MUKgYXd5Q491Q6DRavKGXuuEQIPV5Q09+4bAxjDyht59QmBDOHnDGW1DYGFYecNZCmHujFo/HgILwssbzqwbAg/SyBvOrhMCN9LJG2ZYFgIXaeUNs5SHwC9/5ZWZkhCetPGB0ltUUwgpb5htzt/mN+r7HUJdUJdCCC1vmHFKCAd5w40tdS6EFPKGWcdC+C1veKAQ/vKrs+flDQuOQ0gpb5j9OITL8oaFepv0Cl6f32w+Aa/AR4WADNL/AAAAAElFTkSuQmCC\" />';"
             + "closeButtonCreatedByApp.addEventListener('click', function(event) {"
-            //+ "  postMessageToWindowChromeWebViewCreatedByApp('ws-close');"
-            + "});"
+            + "  postMessageToAppCreatedByApp('wm-close');"
+            + "});"           
             + "controlBoxCreatedByApp.appendChild(hideButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(backButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(forwardButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(fullscreenButtonCreatedByApp);"
             + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
+            + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
             + "document.body.appendChild(controlBoxCreatedByApp);"
         ;
 
@@ -165,37 +135,7 @@ namespace WpfWebViewApp
             }
         }
 
-        // Checking the version using >= enables forward compatibility.
-        string CheckFor45PlusVersion(int releaseKey)
-        {
-            if (releaseKey >= 533320)
-                return "net481";
-            if (releaseKey >= 528040)
-                return "net48";
-            if (releaseKey >= 461808)
-                return "net472";
-            if (releaseKey >= 461308)
-                return "net471";
-            if (releaseKey >= 460798)
-                return "net47";
-            if (releaseKey >= 394802)
-                return "net462";
-            if (releaseKey >= 394254)
-                return "net461";
-            if (releaseKey >= 393295)
-                return "net46";
-            if (releaseKey >= 379893)
-                return "net452";
-            if (releaseKey >= 378675)
-                return "net451";
-            if (releaseKey >= 378389)
-                return "net45";
-            // This code should never execute. A non-null release key should mean
-            // that 4.5 or later is installed.
-            return "net45 under";
-        }
-
-        private void ShowWebView(Setting si)
+        private void ShowWebView(Setting si, bool reload = false)
         {
             this.BusyIndicator.IsBusy = true;
 
@@ -208,6 +148,7 @@ namespace WpfWebViewApp
                     this.WebViewVersion.Text = CoreWebView2Environment.GetAvailableBrowserVersionString();
                     this.EdgeImage.Visibility = Visibility.Visible;
                     this.ChromeImage.Visibility = Visibility.Collapsed;
+                    if (reload) this.WV2.Reload();
                     break;
                 case WebViewType.Chrome:
                     this.WV2.Visibility = Visibility.Hidden;
@@ -216,6 +157,7 @@ namespace WpfWebViewApp
                     this.WebViewVersion.Text = Cef.ChromiumVersion;
                     this.EdgeImage.Visibility = Visibility.Collapsed;
                     this.ChromeImage.Visibility = Visibility.Visible;
+                    if (reload) this.CEF.Reload();
                     break;
             }
 
@@ -225,7 +167,35 @@ namespace WpfWebViewApp
             {
                 if (ndpKey != null && ndpKey.GetValue("Release") != null)
                 {
-                    this.DotNetVersion.Text = string.Format("({0})", CheckFor45PlusVersion((int)ndpKey.GetValue("Release")));
+                    int releaseKey = (int)ndpKey.GetValue("Release");
+                    string netVersion = string.Empty;
+
+                    if (releaseKey >= 533320)
+                        netVersion = "net481";
+                    else if (releaseKey >= 528040)
+                        netVersion = "net48";
+                    else if (releaseKey >= 461808)
+                        netVersion = "net472";
+                    else if (releaseKey >= 461308)
+                        netVersion = "net471";
+                    else if (releaseKey >= 460798)
+                        netVersion = "net47";
+                    else if (releaseKey >= 394802)
+                        netVersion = "net462";
+                    else if (releaseKey >= 394254)
+                        netVersion = "net461";
+                    else if (releaseKey >= 393295)
+                        netVersion = "net46";
+                    else if (releaseKey >= 379893)
+                        netVersion = "net452";
+                    else if (releaseKey >= 378675)
+                        netVersion = "net451";
+                    else if (releaseKey >= 378389)
+                        netVersion = "net45";
+                    else
+                        netVersion = "net45 under";
+
+                    this.DotNetVersion.Text = string.Format("({0})", netVersion);
                 }
                 else
                 {
@@ -244,19 +214,19 @@ namespace WpfWebViewApp
             switch (st.Position)
             {
                 case 0:
-                    position = "top:0;left:0;";
+                    position = "justify-content:flex-end;top:0;left:0;";
                     image = _base64UpImg;
                     break;
                 case 1:
-                    position = "top:0;right:0;";
+                    position = "justify-content:flex-start;top:0;right:0;";
                     image = _base64UpImg;
                     break;
                 case 2:
-                    position = "bottom:0;left:0;";
+                    position = "justify-content:flex-end;bottom:0;left:0;";
                     image = _base64DownImg;
                     break;
                 case 3:
-                    position = "bottom:0;right:0;";
+                    position = "justify-content:flex-start;bottom:0;right:0;";
                     image = _base64DownImg;
                     break;
             }
@@ -330,7 +300,7 @@ namespace WpfWebViewApp
 
             this.SettingGrid.Visibility = Visibility.Hidden;
 
-            ShowWebView(Setting.GetInformation());
+            ShowWebView(Setting.GetInformation(), true);
         }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
@@ -395,15 +365,37 @@ namespace WpfWebViewApp
         private void WV2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             string s = e.TryGetWebMessageAsString();
-            MessageBox.Show(s);
+            WebMessageReceived(s);
         }
 
         private void CEF_JavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
         {
             string s = e.Message as string;
-            MessageBox.Show(s);
+            WebMessageReceived(s);
         }
 
+        private void WebMessageReceived(string message)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                WebMessage webmessage = JsonConvert.DeserializeObject<WebMessage>(message);
+
+                switch (webmessage.key)
+                {
+                    case "wm-normal":
+                        _isFullScreen = false;
+                        this.WindowState = WindowState.Normal;
+                        this.ControlBar.Visibility = Visibility.Visible;
+                        ApplyControlBarButtonState();
+                        break;
+                    case "wm-close":
+                        this.Close();
+                        break;
+                    default:
+                        break;
+                }
+            }));
+        }
 
         // Application to javascript
         //
