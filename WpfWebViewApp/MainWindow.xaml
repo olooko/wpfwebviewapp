@@ -18,7 +18,7 @@
     </WindowChrome.WindowChrome>
     <Window.Resources>
 
-        <Color x:Key="WindowFrameColor">#8B8B8B</Color>
+        <Color x:Key="WindowFrameColor">#CCCDCE</Color>
 
         <Style x:Key="ControlBarButton" TargetType="Button">
             <Setter Property="Template">
@@ -120,13 +120,16 @@
                         <TextBlock x:Name="DotNetVersion" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource ControlBarButton}" Click="SendButton_Click">
+                            <Image Source="/Images/icon_send.png" />
+                        </Button>
                         <Button Style="{StaticResource ControlBarButton}" Click="SettingViewButton_Click">
                             <Image Source="/Images/icon_setting.png" />
                         </Button>
                         <Button Style="{StaticResource ControlBarButton}" Click="FullScreenButton_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image x:Name="FullScreenImage" Source="/Images/icon_fullscreen.png" />
-                                <Image x:Name="FullScreenExitImage" Source="/Images/icon_fullscreen_exit.png" />
+                                <Image x:Name="FullScreenExitImage" Source="/Images/icon_fullscreen_exit.png" Visibility="Collapsed" />
                             </StackPanel>
                         </Button>
                         <Button Style="{StaticResource ControlBarButton}" Click="MinimizeButton_Click">
@@ -135,7 +138,7 @@
                         <Button Style="{StaticResource ControlBarButton}" Click="MaximizeButton_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image x:Name="MaximizeImage" Source="/Images/icon_maximize.png" />
-                                <Image x:Name="NormalImage" Source="/Images/icon_normal.png" />
+                                <Image x:Name="NormalImage" Source="/Images/icon_normal.png" Visibility="Collapsed" />
                             </StackPanel>
                         </Button>
                         <Button Style="{StaticResource ControlBarCloseButton}" Click="CloseButton_Click">

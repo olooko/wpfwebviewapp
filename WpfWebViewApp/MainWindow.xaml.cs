@@ -42,7 +42,7 @@ namespace WpfWebViewApp
             + "}"
             + "var touchCountCreatedByApp = 0;"
             + "var controlBoxCreatedByApp = document.createElement('div');"
-            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#FB8633;opacity:0;width:100px;height:100px;position:absolute;display:flex;';"
+            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#687078;opacity:0;width:100px;height:100px;position:absolute;display:flex;';"
             + "controlBoxCreatedByApp.addEventListener('click', function(event) {"
             + "  event.stopPropagation();"
             + "  if (touchCountCreatedByApp === 0) { setTimeout('checkTouchCountCreatedByApp()', 3000); }"
@@ -66,7 +66,7 @@ namespace WpfWebViewApp
             + "  normalButtonCreatedByApp.style.display = display;"
             + "  closeButtonCreatedByApp.style.display = display;"
             + "}"
-            + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#FB8633;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
+            + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#687078;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
             + "var hideButtonCreatedByApp = document.createElement('button');"
             + "hideButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
             + "hideButtonCreatedByApp.addEventListener('click', function(event) {"
@@ -92,6 +92,21 @@ namespace WpfWebViewApp
             + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
             + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
             + "document.body.appendChild(controlBoxCreatedByApp);"
+            + "if (window.chrome.webview) {"
+            + "  window.chrome.webview.addEventListener('message', function(event) {"
+            + "    MessageReceived(event.data);"
+            + "  });"
+            + "}"
+            + "if (window.hasOwnProperty('CefSharp')) {"
+            + "  document.addEventListener('cefmessage', function(event) {"
+            + "    MessageReceived(event.detail);"
+            + "  });"
+            + "}"
+            + "function MessageReceived(message) {"
+            + "  controlBoxCreatedByApp.style.opacity = 1;"
+            + "  controlBoxCreatedByApp.style.width = '100%';"
+            + "  buttonDisplayCreatedByApp('inline');"
+            + "}"
         ;
 
         private bool _isFullScreen;
@@ -148,7 +163,7 @@ namespace WpfWebViewApp
                     this.WebViewVersion.Text = CoreWebView2Environment.GetAvailableBrowserVersionString();
                     this.EdgeImage.Visibility = Visibility.Visible;
                     this.ChromeImage.Visibility = Visibility.Collapsed;
-                    if (reload) this.WV2.Reload();
+                    //if (reload) this.WV2.Reload();
                     break;
                 case WebViewType.Chrome:
                     this.WV2.Visibility = Visibility.Hidden;
@@ -157,7 +172,7 @@ namespace WpfWebViewApp
                     this.WebViewVersion.Text = Cef.ChromiumVersion;
                     this.EdgeImage.Visibility = Visibility.Collapsed;
                     this.ChromeImage.Visibility = Visibility.Visible;
-                    if (reload) this.CEF.Reload();
+                    //if (reload) this.CEF.Reload();
                     break;
             }
 
@@ -397,24 +412,31 @@ namespace WpfWebViewApp
             }));
         }
 
-        // Application to javascript
+        // App to javascript
         //
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if ((bool)this.Edge.IsChecked)
-        //    {
-        //        this.WV2.CoreWebView2.PostWebMessageAsString("WV2 Alert!!");
-        //    }
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            string message = string.Empty;
 
-        //    if ((bool)this.Chrome.IsChecked)
-        //    {
-        //       //if (this.CEF != null) this.CEF.ShowDevTools();
+            Setting st = Setting.GetInformation();
 
-        //        string script = "var event = new CustomEvent('cefmessage', {bubbles: true, detail:'CEF Alert'}); document.dispatchEvent(event);";
+            switch (st.WebViewType)
+            {
+                case WebViewType.Edge:
+                    this.WV2.CoreWebView2.PostWebMessageAsString(message);
+                    break;
 
-        //        this.CEF.GetMainFrame().ExecuteJavaScriptAsync(script);
-        //    }
-        //}
+                case WebViewType.Chrome:
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendFormat("var event = new CustomEvent('cefmessage', {{bubbles: true, detail:'{0}'}});", message);
+                        sb.Append("document.dispatchEvent(event);");
+                        this.CEF.GetMainFrame().ExecuteJavaScriptAsync(sb.ToString());
+                    }               
+                    break;
+            }
+                
+        }
 
     }
 }
