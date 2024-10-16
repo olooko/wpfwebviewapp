@@ -35,6 +35,11 @@
                                             <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#c7c7c7" />
                                         </Storyboard>
                                     </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#b3b3b3" />
+                                        </Storyboard>
+                                    </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                         </Border>
@@ -51,18 +56,84 @@
                             <Border.Background>
                                 <SolidColorBrush x:Name="ButtonBackgroundBrush" Color="Transparent" />
                             </Border.Background>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image x:Name="CloseImage" Source="/Images/icon_close.png" />
+                                <Image x:Name="CloseReverseImage" Source="/Images/icon_close_reverse.png" Opacity="0" />
+                            </Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="CloseImage" Storyboard.TargetProperty="Opacity" To="0" />
+                                            <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="CloseReverseImage" Storyboard.TargetProperty="Opacity" To="1" />
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#b10e1c" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="CloseImage" Storyboard.TargetProperty="Opacity" To="0" />
+                                            <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="CloseReverseImage" Storyboard.TargetProperty="Opacity" To="1" />
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#960b18" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Padding="12,7,12,7" CornerRadius="8">
+                            <Border.Background>
+                                <SolidColorBrush x:Name="ButtonBackgroundBrush" Color="#e8ebfa" />
+                            </Border.Background>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="MouseOver">
                                         <Storyboard>
-                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#e81123" />
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#dce0fa" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#b6bcfa" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0" Storyboard.TargetName="ButtonBackgroundBrush" Storyboard.TargetProperty="Color" To="#9299f7" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                         </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingTextBox" TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Border" CornerRadius="4" Padding="4,7,4,7" BorderThickness="1" BorderBrush="#d1d1d1">
+                            <Grid>
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost" Background="#ffffff" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="Border.BorderBrush" Value="#5b5fc7" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -178,9 +249,7 @@
                                 <Image x:Name="NormalImage" Source="/Images/icon_normal.png" Visibility="Collapsed" />
                             </StackPanel>
                         </Button>
-                        <Button Style="{StaticResource ControlBarCloseButton}" Click="CloseButton_Click">
-                            <Image Source="/Images/icon_close.png" />
-                        </Button>
+                        <Button Style="{StaticResource ControlBarCloseButton}" Click="CloseButton_Click" />
                     </StackPanel>
                     <Rectangle Height="1" VerticalAlignment="Bottom">
                         <Rectangle.Fill>
@@ -215,30 +284,41 @@
                 <StackPanel Width="400" VerticalAlignment="Center">
                     <Label Content="WebView Type"/>
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton GroupName="WebView" Name="Edge">
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="Edge" Checked="Edge_Checked">
                             <TextBlock Text="Edge" />
-                        </RadioButton>
-                        <Rectangle Width="10" />
-                        <RadioButton GroupName="WebView" Name="Chrome">
+                        </ToggleButton>
+                        <Rectangle Width="4" />
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="Chrome" Checked="Chrome_Checked">
                             <TextBlock Text="Chrome" />
-                        </RadioButton>
+                        </ToggleButton>
                     </StackPanel>
-                    <Rectangle Height="10" />
+                    <Rectangle Height="8" />
                     <Label Content="Source URL"/>
-                    <TextBox x:Name="SettingUrl" />
-                    <Rectangle Height="10" />
+                    <TextBox Style="{StaticResource SettingTextBox}" x:Name="SettingUrl" />
+                    <Rectangle Height="8" />
                     <Label Content="Touch Position for ControlBox" />
-                    <ComboBox x:Name="SettingPosition">
-                        <ComboBoxItem Content="TopLeft" />
-                        <ComboBoxItem Content="TopRight" />
-                        <ComboBoxItem Content="BottomLeft" />
-                        <ComboBoxItem Content="BottomRight" />
-                    </ComboBox>
-                    <Rectangle Height="20" />
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="TopLeft" Checked="TopLeft_Checked">
+                            <TextBlock Text="TopLeft" />
+                        </ToggleButton>
+                        <Rectangle Width="4" />
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="TopRight" Checked="TopRight_Checked">
+                            <TextBlock Text="TopRight" />
+                        </ToggleButton>
+                        <Rectangle Width="4" />
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="BottomLeft" Checked="BottomLeft_Checked">
+                            <TextBlock Text="BottomLeft" />
+                        </ToggleButton>
+                        <Rectangle Width="4" />
+                        <ToggleButton Style="{StaticResource SettingToggleButton}" x:Name="BottomRight" Checked="BottomRight_Checked">
+                            <TextBlock Text="BottomRight" />
+                        </ToggleButton>
+                    </StackPanel>
+                    <Rectangle Height="16" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="4" />
+                            <ColumnDefinition Width="8" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button Style="{StaticResource SettingSaveButton}" Click="SettingSaveButton_Click" />

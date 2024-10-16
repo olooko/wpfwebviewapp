@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WpfWebViewApp
 {
-    public enum WebViewType
+    public enum TouchPosition
     {
-        None, Edge, Chrome
+        None, TopLeft, TopRight, BottomLeft, BottomRight
     }
 }

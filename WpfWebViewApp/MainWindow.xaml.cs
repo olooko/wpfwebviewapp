@@ -230,21 +230,21 @@ namespace WpfWebViewApp
 
             Setting st = Setting.GetInformation();
 
-            switch (st.Position)
+            switch (st.TouchPosition)
             {
-                case 0:
+                case TouchPosition.TopLeft:
                     position = "justify-content:flex-end;top:0;left:0;";
                     image = _base64UpImage;
                     break;
-                case 1:
+                case TouchPosition.TopRight:
                     position = "justify-content:flex-start;top:0;right:0;";
                     image = _base64UpImage;
                     break;
-                case 2:
+                case TouchPosition.BottomLeft:
                     position = "justify-content:flex-end;bottom:0;left:0;";
                     image = _base64DownImage;
                     break;
-                case 3:
+                case TouchPosition.BottomRight:
                     position = "justify-content:flex-start;bottom:0;right:0;";
                     image = _base64DownImage;
                     break;
@@ -305,17 +305,87 @@ namespace WpfWebViewApp
             }
 
             this.SettingUrl.Text = st.Url;
-            this.SettingPosition.SelectedIndex = st.Position;
+
+            switch (st.TouchPosition)
+            {
+                case TouchPosition.TopLeft:
+                    this.TopLeft.IsChecked = true;
+                    break;
+                case TouchPosition.TopRight:
+                    this.TopRight.IsChecked = true;
+                    break;
+                case TouchPosition.BottomLeft:
+                    this.BottomLeft.IsChecked = true;
+                    break;
+                case TouchPosition.BottomRight:
+                    this.BottomRight.IsChecked = true;
+                    break;
+            }
+        }
+
+        private void Edge_Checked(object sender, RoutedEventArgs e)
+        {
+            this.Chrome.IsChecked = false;
+        }
+
+        private void Chrome_Checked(object sender, RoutedEventArgs e)
+        {
+            this.Edge.IsChecked = false;
+        }
+
+        private void TopLeft_Checked(object sender, RoutedEventArgs e)
+        {
+            this.TopRight.IsChecked = false;
+            this.BottomLeft.IsChecked = false;
+            this.BottomRight.IsChecked = false;
+        }
+
+        private void TopRight_Checked(object sender, RoutedEventArgs e)
+        {
+            this.TopLeft.IsChecked = false;
+            this.BottomLeft.IsChecked = false;
+            this.BottomRight.IsChecked = false;
+        }
+
+        private void BottomLeft_Checked(object sender, RoutedEventArgs e)
+        {
+            this.TopLeft.IsChecked = false;
+            this.TopRight.IsChecked = false;
+            this.BottomRight.IsChecked = false;
+        }
+
+        private void BottomRight_Checked(object sender, RoutedEventArgs e)
+        {
+            this.TopLeft.IsChecked = false;
+            this.TopRight.IsChecked = false;
+            this.BottomLeft.IsChecked = false;
         }
 
         private void SettingSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            WebViewType webviewType = WebViewType.Edge;
+            WebViewType webviewType = WebViewType.None;
+
+            if (this.Edge.IsChecked == true)
+                webviewType = WebViewType.Edge;
 
             if (this.Chrome.IsChecked == true)
                 webviewType = WebViewType.Chrome;
 
-            Setting.Save(webviewType, this.SettingUrl.Text, this.SettingPosition.SelectedIndex);
+            TouchPosition touchPosition = TouchPosition.None;
+
+            if (this.TopLeft.IsChecked == true)
+                touchPosition = TouchPosition.TopLeft;
+
+            if (this.TopRight.IsChecked == true)
+                touchPosition = TouchPosition.TopRight;
+
+            if (this.BottomLeft.IsChecked == true)
+                touchPosition = TouchPosition.BottomLeft;
+
+            if (this.BottomRight.IsChecked == true)
+                touchPosition = TouchPosition.BottomRight;
+
+            Setting.Save(webviewType, this.SettingUrl.Text, touchPosition);
 
             this.SettingGrid.Visibility = Visibility.Hidden;
 
@@ -445,9 +515,7 @@ namespace WpfWebViewApp
                         this.CEF.GetMainFrame().ExecuteJavaScriptAsync(sb.ToString());
                     }               
                     break;
-            }
-                
+            }       
         }
-
     }
 }
