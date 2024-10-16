@@ -2,25 +2,11 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Xml.Linq;
 
 namespace WpfWebViewApp
 {
@@ -47,8 +33,9 @@ namespace WpfWebViewApp
                 + "  var webmessage = new Object();"
                 + "  webmessage.key = key;"
                 + "  webmessage.data = data;"
-                + "  if (window.chrome.webview) window.chrome.webview.postMessage(JSON.stringify(webmessage));"
-                + "  if (window.hasOwnProperty('CefSharp')) CefSharp.PostMessage(JSON.stringify(webmessage));"
+                + "  var message = JSON.stringify(webmessage);"
+                + "  if (window.chrome.webview) window.chrome.webview.postMessage(message);"
+                + "  if (window.hasOwnProperty('CefSharp')) CefSharp.PostMessage(message);"
                 + "}"
                 + "var touchCountCreatedByApp = 0;"
                 + "var controlBoxCreatedByApp = document.createElement('div');"
@@ -97,7 +84,7 @@ namespace WpfWebViewApp
                 + string.Format("closeButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"{0}\" />';", _base64CloseImage)
                 + "closeButtonCreatedByApp.addEventListener('click', function(event) {"
                 + "  postMessageToAppCreatedByApp('wm-close');"
-                + "});"           
+                + "});"
                 + "controlBoxCreatedByApp.appendChild(hideButtonCreatedByApp);"
                 + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
                 + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
@@ -458,6 +445,8 @@ namespace WpfWebViewApp
             }
         }
 
+        // from Javascript to WebView
+        //
         private void WV2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             string s = e.TryGetWebMessageAsString();
@@ -493,11 +482,15 @@ namespace WpfWebViewApp
             }));
         }
 
-        // App to javascript
+        // from WebView to Javascript
         //
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            string message = string.Empty;
+            WebMessage webmessage = new WebMessage();
+            webmessage.key = string.Empty;
+            webmessage.data = string.Empty;
+
+            string message = JsonConvert.SerializeObject(webmessage);
 
             Setting st = Setting.GetInformation();
 

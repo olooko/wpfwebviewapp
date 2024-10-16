@@ -20,6 +20,7 @@
     <None Remove="Images\icon_maximize.png" />
     <None Remove="Images\icon_minimize.png" />
     <None Remove="Images\icon_normal.png" />
+    <None Remove="Images\icon_send.png" />
     <None Remove="Images\icon_setting.png" />
   </ItemGroup>
 
@@ -40,6 +41,7 @@
     <Resource Include="Images\icon_maximize.png" />
     <Resource Include="Images\icon_minimize.png" />
     <Resource Include="Images\icon_normal.png" />
+    <Resource Include="Images\icon_send.png" />
     <Resource Include="Images\icon_setting.png" />
   </ItemGroup>
 
