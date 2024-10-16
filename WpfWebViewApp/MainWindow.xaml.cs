@@ -29,91 +29,95 @@ namespace WpfWebViewApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _base64UpImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAH0SURBVHhe7ZBLUsMwEESzYM89+KwDR88NuAMngBWcIHSnuosAJrbHsi0586qUcmxp1K93SZIkSZIkSbI8x+Pxlkt/rwvJv2hdVwln8uZ6SqCohH+z/RIoKNH/2G4JFJNgH9srgUISG8p2SqCIhMbSfgkUkEiUdktgcAlMpb0SGFjBS9FOCQyqwKWpvwQGVNC5qLcEBlPAuamvBAZSsKWopwQGUaAI71oR1i+BARQkAsUfsR70HGG9EnixAkQ4yWsUZ7VVAi/UxRF+yBu8a6MEXqQLI3TKG3yruwReoIsiXJQ32FNnCRysCyIMkjfYW1cJHKjBEUbJG5y519kI5UrgIA2MEJI3OLtuCRygQREmyRvMWKcEHtSACEXkDWYtWwIP6GCEovIGM5cpgRt1IMIs8gazWcIbLwrQXwI3aGOEWeUN7pinBH7QhgiLyBvcVbYEvtCHCIvKG9xZpgQ+6EWEVeQN7p5eAn4Op7/jWVXeIMOUEg4csMf6OP0dThXyBlkiJXxi7T1gTAlVyRtkusMaWsK3vOELrL4SqpQ3yDakhL/yhh+w/iuhanmDjJdKoPyTtnaDDV0lNCFvkLWrhH55g43nJTQlb5D5vATKP+vTMHCAJbxiNSdvkJ0l0GGcvMHBGz02yxYckiRJkiRJkiRJCrPbfQHnv65TQMyqmwAAAABJRU5ErkJggg==";
-        private string _base64DownImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHzSURBVHhe7ZBLUsMwEESzYJ978FkDR88NuAMngBWcIHSb7gJCEtsT2ZaceVVKObY06tebJEmSJEmSJEmS5ID9fn+jx2YJO+DgM9Yr1q1eNQeyP8jhUa+GgQOU/8Qib1jNlYDMlH+nAPjAGlYCNj5hWd40VQKy/pY3/SVgwzF500QJyHhM3pwugR+wTsmbqktAtnPy5n8JfIHVJ2+qLAGZhsibnxL4gDVU3rCEu25ABSDLGHnzXQJ+dt3f8VRRAjJE5M2OA7ZYL93f8SxaAu6+RJ7OWw9qrgTcWUbe8IU+RJi1BNxVVt7wgzZEmKUE3DGNvOEGbYwwaQmYPa284UYdiMCAxUvAzHnkDQ/oYISiJWDWvPKGBzUgQpESMGMZecMBGhThohJwdll5w0EaGCFUAs7UIW84UIMjUOReo3rB3rrkDQfrggiDSsCeOuUNL9BFEc6WgG91yxtepAsjHC0B79qQN7xQF0f4UwKe25I3vFgBInQlYLUpbxhAQSJQvF15wyAKNBf1yBsGUrCpqU/eMJgCTkW98oYBFbQ09csbBlXgUrQjbxhYwS+lPXnD4BKI0q68oYBExtK+vKGIhIayHnlDIYn1sT55QzEJnmK98oaCEj1k/fKGohI21yNvKCzx65M3KuE65ZMkSZIkSZJF2Wy+AMdurlOXoaKsAAAAAElFTkSuQmCC";
+        private const string _base64UpImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAH0SURBVHhe7ZBLUsMwEESzYM89+KwDR88NuAMngBWcIHSnuosAJrbHsi0586qUcmxp1K93SZIkSZIkSbI8x+Pxlkt/rwvJv2hdVwln8uZ6SqCohH+z/RIoKNH/2G4JFJNgH9srgUISG8p2SqCIhMbSfgkUkEiUdktgcAlMpb0SGFjBS9FOCQyqwKWpvwQGVNC5qLcEBlPAuamvBAZSsKWopwQGUaAI71oR1i+BARQkAsUfsR70HGG9EnixAkQ4yWsUZ7VVAi/UxRF+yBu8a6MEXqQLI3TKG3yruwReoIsiXJQ32FNnCRysCyIMkjfYW1cJHKjBEUbJG5y519kI5UrgIA2MEJI3OLtuCRygQREmyRvMWKcEHtSACEXkDWYtWwIP6GCEovIGM5cpgRt1IMIs8gazWcIbLwrQXwI3aGOEWeUN7pinBH7QhgiLyBvcVbYEvtCHCIvKG9xZpgQ+6EWEVeQN7p5eAn4Op7/jWVXeIMOUEg4csMf6OP0dThXyBlkiJXxi7T1gTAlVyRtkusMaWsK3vOELrL4SqpQ3yDakhL/yhh+w/iuhanmDjJdKoPyTtnaDDV0lNCFvkLWrhH55g43nJTQlb5D5vATKP+vTMHCAJbxiNSdvkJ0l0GGcvMHBGz02yxYckiRJkiRJkiRJCrPbfQHnv65TQMyqmwAAAABJRU5ErkJggg==";
+        private const string _base64DownImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHzSURBVHhe7ZBLUsMwEESzYJ978FkDR88NuAMngBWcIHSb7gJCEtsT2ZaceVVKObY06tebJEmSJEmSJEmS5ID9fn+jx2YJO+DgM9Yr1q1eNQeyP8jhUa+GgQOU/8Qib1jNlYDMlH+nAPjAGlYCNj5hWd40VQKy/pY3/SVgwzF500QJyHhM3pwugR+wTsmbqktAtnPy5n8JfIHVJ2+qLAGZhsibnxL4gDVU3rCEu25ABSDLGHnzXQJ+dt3f8VRRAjJE5M2OA7ZYL93f8SxaAu6+RJ7OWw9qrgTcWUbe8IU+RJi1BNxVVt7wgzZEmKUE3DGNvOEGbYwwaQmYPa284UYdiMCAxUvAzHnkDQ/oYISiJWDWvPKGBzUgQpESMGMZecMBGhThohJwdll5w0EaGCFUAs7UIW84UIMjUOReo3rB3rrkDQfrggiDSsCeOuUNL9BFEc6WgG91yxtepAsjHC0B79qQN7xQF0f4UwKe25I3vFgBInQlYLUpbxhAQSJQvF15wyAKNBf1yBsGUrCpqU/eMJgCTkW98oYBFbQ09csbBlXgUrQjbxhYwS+lPXnD4BKI0q68oYBExtK+vKGIhIayHnlDIYn1sT55QzEJnmK98oaCEj1k/fKGohI21yNvKCzx65M3KuE65ZMkSZIkSZJF2Wy+AMdurlOXoaKsAAAAAElFTkSuQmCC";
+        private const string _base64NormalImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAENSURBVHhe7dtBSsNAGMXxjBdx4cYL6BUUyZFKS4/lokeoa4W0V5l+w7xVIdVkki58/x8M7wuEMLxFSRPSzZFz7mP95lunN4trDfWSN73r9EkelLYoQGmLApS2KEBpiwKUtihAacu+gBR/InrNU7zE2tZx1E9K6Vlzk9jjEPFUj0btYn3V8e9KAVnz0u5dwCz8BihtUYDSFgUobdkXUO4DFnt6e+Uc9wEfmpvEHj8jHusRAAAAAAAA0KI8EiuvndZwSim9aW4SezxErPJIjHeDSlsUoLRFAUpbFKC0Ve4D5nxp8RprX8dR974P2MQ61nFlsSE+mfkvKEBpiwKUtihAaYsClLYoQGnLvICuuwATWdR/tQ/JbwAAAABJRU5ErkJggg==";
+        private const string _base64CloseImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKkSURBVHhe7ZtRTuNAEAUjrgAcg3B/KdwBOAZwh1AP/JQgEscez4y7CSX1rtee6el62eVjI29Osd/vH6kddTvcSgsO99QT9TDcGoeFkv+gxDOVNgRml/yrROCdGg+BBcfyJmUIzHwsb86HwINT8iZVCMx6St4ohO2w9BtujMmbFCEw45i8OYTAxRR5EzoEZpsib+S81Sb9hJxDyBCYaY682WnjLfXy9cfpaH2YEJilRP7wQeqCShkCMyyTN7pBpQqBs+vIGz2gUoTAmXXljRZQoUPgrDbyRgupkhDuhhbN4Iy28oYNd1SoEOjdR96wMUwI9Owrb2iwegj0Wkfe0Gi1EOixrryhYfcQ2BtD3tC4WwjsiSVvOKB5CKyNKW84SCHMHVDrL4bAmtjyhgOrh8CzHPKGg6uFwL1c8oYBFofAdU55wyDFIVC55Q0DlYaQX94wWMmnOYe48oYBW4UQX94waO0Q8sgbBq4VQj55w+BLQ8grbxAoDaGL/M3w+z8t4BO83n8CDH69PwQZuJa8yRMCg9aWN/FDYMBW8iZuCAxWIi8h1RzihcBApfL6Ci7dt9I/YJBi+aGFeuQMgQEWyxvdo/KEwMHV5I2eUfFD4MDq8kZrqLghcFAzeaO1VEkIk798KYIDmssb9uj/GOOEQONu8oa9MUKgYXd5Q491Q6DRavKGXuuEQIPV5Q09+4bAxjDyht59QmBDOHnDGW1DYGFYecNZCmHujFo/HgILwssbzqwbAg/SyBvOrhMCN9LJG2ZYFgIXaeUNs5SHwC9/5ZWZkhCetPGB0ltUUwgpb5htzt/mN+r7HUJdUJdCCC1vmHFKCAd5w40tdS6EFPKGWcdC+C1veKAQ/vKrs+flDQuOQ0gpb5j9OITL8oaFepv0Cl6f32w+Aa/AR4WADNL/AAAAAElFTkSuQmCC";
 
-        private string _defaultJavascriptString = ""
-            + "function postMessageToAppCreatedByApp(key, data) {"
-            + "  var webmessage = new Object();"
-            + "  webmessage.key = key;"
-            + "  webmessage.data = data;"
-            + "  if (window.chrome.webview) window.chrome.webview.postMessage(JSON.stringify(webmessage));"
-            + "  if (window.hasOwnProperty('CefSharp')) CefSharp.PostMessage(JSON.stringify(webmessage));"
-            + "}"
-            + "var touchCountCreatedByApp = 0;"
-            + "var controlBoxCreatedByApp = document.createElement('div');"
-            + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#687078;opacity:0;width:100px;height:100px;position:absolute;display:flex;';"
-            + "controlBoxCreatedByApp.addEventListener('click', function(event) {"
-            + "  event.stopPropagation();"
-            + "  if (touchCountCreatedByApp === 0) { setTimeout('checkTouchCountCreatedByApp()', 3000); }"
-            + "  touchCountCreatedByApp = touchCountCreatedByApp + 1;"
-            + "  if (touchCountCreatedByApp >= 5) {"
-            + "    controlBoxCreatedByApp.style.opacity = 1;"
-            + "    controlBoxCreatedByApp.style.width = '100%';"
-            + "    buttonDisplayCreatedByApp('inline');"
-            + "  }"
-            + "});"
-            + "function checkTouchCountCreatedByApp() {"
-            + "  if (touchCountCreatedByApp < 5) {"
-            + "    touchCountCreatedByApp = 0;"
-            + "    controlBoxCreatedByApp.style.opacity = 0;"
-            + "    controlBoxCreatedByApp.style.width = '100px';"
-            + "    buttonDisplayCreatedByApp('none');"
-            + "  }"
-            + "}"
-            + "function buttonDisplayCreatedByApp(display) {"
-            + "  hideButtonCreatedByApp.style.display = display;"
-            + "  normalButtonCreatedByApp.style.display = display;"
-            + "  closeButtonCreatedByApp.style.display = display;"
-            + "}"
-            + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#687078;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
-            + "var hideButtonCreatedByApp = document.createElement('button');"
-            + "hideButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
-            + "hideButtonCreatedByApp.addEventListener('click', function(event) {"
-            + "  event.stopPropagation();"
-            + "	 touchCountCreatedByApp = 0;"
-            + "	 controlBoxCreatedByApp.style.opacity = 0;"
-            + "	 controlBoxCreatedByApp.style.width = '100px';"
-            + "	 buttonDisplayCreatedByApp('none');"
-            + "});"
-            + "var normalButtonCreatedByApp = document.createElement('button');"
-            + "normalButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
-            + "normalButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAENSURBVHhe7dtBSsNAGMXxjBdx4cYL6BUUyZFKS4/lokeoa4W0V5l+w7xVIdVkki58/x8M7wuEMLxFSRPSzZFz7mP95lunN4trDfWSN73r9EkelLYoQGmLApS2KEBpiwKUtihAacu+gBR/InrNU7zE2tZx1E9K6Vlzk9jjEPFUj0btYn3V8e9KAVnz0u5dwCz8BihtUYDSFgUobdkXUO4DFnt6e+Uc9wEfmpvEHj8jHusRAAAAAAAA0KI8EiuvndZwSim9aW4SezxErPJIjHeDSlsUoLRFAUpbFKC0Ve4D5nxp8RprX8dR974P2MQ61nFlsSE+mfkvKEBpiwKUtihAaYsClLYoQGnLvICuuwATWdR/tQ/JbwAAAABJRU5ErkJggg==\"/>';"
-            + "normalButtonCreatedByApp.addEventListener('click', function(event) {"
-            + "  postMessageToAppCreatedByApp('wm-normal');"
-            + "});"
-            + "var closeButtonCreatedByApp = document.createElement('button');"
-            + "closeButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
-            + "closeButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKkSURBVHhe7ZtRTuNAEAUjrgAcg3B/KdwBOAZwh1AP/JQgEscez4y7CSX1rtee6el62eVjI29Osd/vH6kddTvcSgsO99QT9TDcGoeFkv+gxDOVNgRml/yrROCdGg+BBcfyJmUIzHwsb86HwINT8iZVCMx6St4ohO2w9BtujMmbFCEw45i8OYTAxRR5EzoEZpsib+S81Sb9hJxDyBCYaY682WnjLfXy9cfpaH2YEJilRP7wQeqCShkCMyyTN7pBpQqBs+vIGz2gUoTAmXXljRZQoUPgrDbyRgupkhDuhhbN4Iy28oYNd1SoEOjdR96wMUwI9Owrb2iwegj0Wkfe0Gi1EOixrryhYfcQ2BtD3tC4WwjsiSVvOKB5CKyNKW84SCHMHVDrL4bAmtjyhgOrh8CzHPKGg6uFwL1c8oYBFofAdU55wyDFIVC55Q0DlYaQX94wWMmnOYe48oYBW4UQX94waO0Q8sgbBq4VQj55w+BLQ8grbxAoDaGL/M3w+z8t4BO83n8CDH69PwQZuJa8yRMCg9aWN/FDYMBW8iZuCAxWIi8h1RzihcBApfL6Ci7dt9I/YJBi+aGFeuQMgQEWyxvdo/KEwMHV5I2eUfFD4MDq8kZrqLghcFAzeaO1VEkIk798KYIDmssb9uj/GOOEQONu8oa9MUKgYXd5Q491Q6DRavKGXuuEQIPV5Q09+4bAxjDyht59QmBDOHnDGW1DYGFYecNZCmHujFo/HgILwssbzqwbAg/SyBvOrhMCN9LJG2ZYFgIXaeUNs5SHwC9/5ZWZkhCetPGB0ltUUwgpb5htzt/mN+r7HUJdUJdCCC1vmHFKCAd5w40tdS6EFPKGWcdC+C1veKAQ/vKrs+flDQuOQ0gpb5j9OITL8oaFepv0Cl6f32w+Aa/AR4WADNL/AAAAAElFTkSuQmCC\" />';"
-            + "closeButtonCreatedByApp.addEventListener('click', function(event) {"
-            + "  postMessageToAppCreatedByApp('wm-close');"
-            + "});"           
-            + "controlBoxCreatedByApp.appendChild(hideButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
-            + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
-            + "document.body.appendChild(controlBoxCreatedByApp);"
-            + "if (window.chrome.webview) {"
-            + "  window.chrome.webview.addEventListener('message', function(event) {"
-            + "    MessageReceived(event.data);"
-            + "  });"
-            + "}"
-            + "if (window.hasOwnProperty('CefSharp')) {"
-            + "  document.addEventListener('cefmessage', function(event) {"
-            + "    MessageReceived(event.detail);"
-            + "  });"
-            + "}"
-            + "function MessageReceived(message) {"
-            + "  controlBoxCreatedByApp.style.opacity = 1;"
-            + "  controlBoxCreatedByApp.style.width = '100%';"
-            + "  buttonDisplayCreatedByApp('inline');"
-            + "}"
-        ;
+        private string _defaultJavascriptString = string.Empty;
 
         private bool _isFullScreen;
 
         public MainWindow()
         {
-            InitializeComponent();   
+            InitializeComponent();
+
+            _defaultJavascriptString = ""
+                + "function postMessageToAppCreatedByApp(key, data) {"
+                + "  var webmessage = new Object();"
+                + "  webmessage.key = key;"
+                + "  webmessage.data = data;"
+                + "  if (window.chrome.webview) window.chrome.webview.postMessage(JSON.stringify(webmessage));"
+                + "  if (window.hasOwnProperty('CefSharp')) CefSharp.PostMessage(JSON.stringify(webmessage));"
+                + "}"
+                + "var touchCountCreatedByApp = 0;"
+                + "var controlBoxCreatedByApp = document.createElement('div');"
+                + "controlBoxCreatedByApp.style.cssText = 'cursor:pointer;z-index:1234567890;background-color:#5b5fc7;opacity:0;width:100px;height:100px;position:absolute;display:flex;';"
+                + "controlBoxCreatedByApp.addEventListener('click', function(event) {"
+                + "  event.stopPropagation();"
+                + "  if (touchCountCreatedByApp === 0) { setTimeout('checkTouchCountCreatedByApp()', 3000); }"
+                + "  touchCountCreatedByApp = touchCountCreatedByApp + 1;"
+                + "  if (touchCountCreatedByApp >= 5) {"
+                + "    controlBoxCreatedByApp.style.opacity = 1;"
+                + "    controlBoxCreatedByApp.style.width = '100%';"
+                + "    buttonDisplayCreatedByApp('inline');"
+                + "  }"
+                + "});"
+                + "function checkTouchCountCreatedByApp() {"
+                + "  if (touchCountCreatedByApp < 5) {"
+                + "    touchCountCreatedByApp = 0;"
+                + "    controlBoxCreatedByApp.style.opacity = 0;"
+                + "    controlBoxCreatedByApp.style.width = '100px';"
+                + "    buttonDisplayCreatedByApp('none');"
+                + "  }"
+                + "}"
+                + "function buttonDisplayCreatedByApp(display) {"
+                + "  hideButtonCreatedByApp.style.display = display;"
+                + "  normalButtonCreatedByApp.style.display = display;"
+                + "  closeButtonCreatedByApp.style.display = display;"
+                + "}"
+                + "var buttonStyleCreatedByApp = 'display:none;margin:4px 2px 4px 2px;width:92px;height:92px;border:2px solid black;background-color:#5b5fc7;color:white;border-color:white;cursor:pointer;border-radius:5px;';"
+                + "var hideButtonCreatedByApp = document.createElement('button');"
+                + "hideButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+                + "hideButtonCreatedByApp.addEventListener('click', function(event) {"
+                + "  event.stopPropagation();"
+                + "	 touchCountCreatedByApp = 0;"
+                + "	 controlBoxCreatedByApp.style.opacity = 0;"
+                + "	 controlBoxCreatedByApp.style.width = '100px';"
+                + "	 buttonDisplayCreatedByApp('none');"
+                + "});"
+                + "var normalButtonCreatedByApp = document.createElement('button');"
+                + "normalButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+                + string.Format("normalButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"{0}\"/>';", _base64NormalImage)
+                + "normalButtonCreatedByApp.addEventListener('click', function(event) {"
+                + "  postMessageToAppCreatedByApp('wm-normal');"
+                + "});"
+                + "var closeButtonCreatedByApp = document.createElement('button');"
+                + "closeButtonCreatedByApp.style.cssText = buttonStyleCreatedByApp;"
+                + string.Format("closeButtonCreatedByApp.innerHTML = '<img width=\"50px\" height=\"50px\" src=\"{0}\" />';", _base64CloseImage)
+                + "closeButtonCreatedByApp.addEventListener('click', function(event) {"
+                + "  postMessageToAppCreatedByApp('wm-close');"
+                + "});"           
+                + "controlBoxCreatedByApp.appendChild(hideButtonCreatedByApp);"
+                + "controlBoxCreatedByApp.appendChild(normalButtonCreatedByApp);"
+                + "controlBoxCreatedByApp.appendChild(closeButtonCreatedByApp);"
+                + "document.body.appendChild(controlBoxCreatedByApp);"
+                + "if (window.chrome.webview) {"
+                + "  window.chrome.webview.addEventListener('message', function(event) {"
+                + "    MessageReceived(event.data);"
+                + "  });"
+                + "}"
+                + "if (window.hasOwnProperty('CefSharp')) {"
+                + "  document.addEventListener('cefmessage', function(event) {"
+                + "    MessageReceived(event.detail);"
+                + "  });"
+                + "}"
+                + "function MessageReceived(message) {"
+                + "  controlBoxCreatedByApp.style.opacity = 1;"
+                + "  controlBoxCreatedByApp.style.width = '100%';"
+                + "  buttonDisplayCreatedByApp('inline');"
+                + "}"
+            ;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -230,19 +234,19 @@ namespace WpfWebViewApp
             {
                 case 0:
                     position = "justify-content:flex-end;top:0;left:0;";
-                    image = _base64UpImg;
+                    image = _base64UpImage;
                     break;
                 case 1:
                     position = "justify-content:flex-start;top:0;right:0;";
-                    image = _base64UpImg;
+                    image = _base64UpImage;
                     break;
                 case 2:
                     position = "justify-content:flex-end;bottom:0;left:0;";
-                    image = _base64DownImg;
+                    image = _base64DownImage;
                     break;
                 case 3:
                     position = "justify-content:flex-start;bottom:0;right:0;";
-                    image = _base64DownImg;
+                    image = _base64DownImage;
                     break;
             }
 
@@ -313,6 +317,13 @@ namespace WpfWebViewApp
 
             Setting.Save(webviewType, this.SettingUrl.Text, this.SettingPosition.SelectedIndex);
 
+            this.SettingGrid.Visibility = Visibility.Hidden;
+
+            ShowWebView(Setting.GetInformation(), true);
+        }
+
+        private void SettingCancelButton_Click(object sender, RoutedEventArgs e)
+        {
             this.SettingGrid.Visibility = Visibility.Hidden;
 
             ShowWebView(Setting.GetInformation(), true);

@@ -24,8 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="BusyIndicators" Version="2.1.2" />
-    <PackageReference Include="CefSharp.Wpf" Version="126.2.180" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2651.64" />
+    <PackageReference Include="CefSharp.Wpf" Version="129.0.110" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
