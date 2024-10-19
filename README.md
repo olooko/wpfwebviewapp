@@ -1,4 +1,4 @@
-## WebView App using WebView2 and CefSharp on net4.8
+## WPF WebView App using WebView2 and CefSharp on net4.8
 
 ### JSON String Definition 
 Javascript
