@@ -1,9 +1,9 @@
 ﻿using CefSharp;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -463,7 +463,7 @@ namespace WpfWebViewApp
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                WebMessage webmessage = JsonConvert.DeserializeObject<WebMessage>(message);
+                WebMessage webmessage = JsonSerializer.Deserialize<WebMessage>(message);
 
                 switch (webmessage.key)
                 {
@@ -490,7 +490,7 @@ namespace WpfWebViewApp
             webmessage.key = string.Empty;
             webmessage.data = string.Empty;
 
-            string message = JsonConvert.SerializeObject(webmessage);
+            string message = JsonSerializer.Serialize(webmessage);
 
             Setting st = Setting.GetInformation();
 
